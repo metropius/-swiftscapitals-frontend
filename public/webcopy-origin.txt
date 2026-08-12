@@ -1,0 +1,612 @@
+Uri: https://bk1.timdigitalz.com/
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\index.htm
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/about
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\about.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/alerts
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\alerts.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/apps
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\apps.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/business
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\business.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/cards
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\cards.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/chart
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\chart.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/contact
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\contact.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/forgot-password
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\forgot-password.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/images/icons/icon-512x512.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\icon-512x512.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1125x2436.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1125x2436.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1242x2208.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1242x2208.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1242x2688.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1242x2688.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1536x2048.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1536x2048.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1668x2224.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1668x2224.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-1668x2388.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-1668x2388.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-2048x2732.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-2048x2732.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-640x1136.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-640x1136.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-750x1334.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-750x1334.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/images/icons/splash-828x1792.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\images\icons\splash-828x1792.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/loans
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\loans.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/login
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\login.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/manifest.json
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\manifest.json
+Content Type: application/json
+
+Uri: https://bk1.timdigitalz.com/personal
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\personal.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/register
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\register.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/send-money
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\send-money.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\storage\app\public\photos\I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\storage\app\public\photos\TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/aos.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\aos.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/bootstrap.min.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\bootstrap.min.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/dark-theme.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\dark-theme.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/fancybox.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\fancybox.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/flaticon.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\flaticon.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/odometer.min.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\odometer.min.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/owl.carousel.min.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\owl.carousel.min.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/owl.video.play.html
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\owl.video.play.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/remixicon.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\remixicon.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/responsive.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\responsive.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/css/style.css
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\css\style.css
+Content Type: text/css
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/flaticon63cc63cc.eot?cefae1a4bb47c2f93f732cd251c9c01e
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\flaticon63cc63cc.eot
+Content Type: application/vnd.ms-fontobject
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/flaticon63cc63cc.svg?cefae1a4bb47c2f93f732cd251c9c01e
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\flaticon63cc63cc.svg
+Content Type: image/svg+xml
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/flaticon63cc63cc.ttf?cefae1a4bb47c2f93f732cd251c9c01e
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\flaticon63cc63cc.ttf
+Content Type: font/ttf
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/flaticon63cc63cc.woff2?cefae1a4bb47c2f93f732cd251c9c01e
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\flaticon63cc63cc.woff2
+Content Type: font/woff2
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/flaticon63cc63cc.woff?cefae1a4bb47c2f93f732cd251c9c01e
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\flaticon63cc63cc.woff
+Content Type: font/woff
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/remixicondf6ddf6d.eot?t=1590207869815
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\remixicondf6ddf6d.eot
+Content Type: application/vnd.ms-fontobject
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/remixicondf6ddf6d.svg?t=1590207869815
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\remixicondf6ddf6d.svg
+Content Type: image/svg+xml
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/remixicondf6ddf6d.ttf?t=1590207869815
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\remixicondf6ddf6d.ttf
+Content Type: font/ttf
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/remixicondf6ddf6d.woff2?t=1590207869815
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\remixicondf6ddf6d.woff2
+Content Type: font/woff2
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/fonts/remixicondf6ddf6d.woff?t=1590207869815
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\fonts\remixicondf6ddf6d.woff
+Content Type: font/woff
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-1.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-1.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-2.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-2.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-3.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-3.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-4.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-4.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-5.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-5.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-img-6.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-img-6.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/about-shape-4.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\about-shape-4.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/app-store.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\app-store.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/about/play-store.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\about\play-store.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/app-screen.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\app-screen.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/blog/blog-1.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\blog\blog-1.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/blog/blog-2.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\blog\blog-2.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/blog/blog-3.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\blog\blog-3.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/breadcrumb/breadcrumb-1.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\breadcrumb\breadcrumb-1.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-1.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-1.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-2.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-2.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-3.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-3.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-4.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-4.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-5.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-5.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/chart-img/chart-6.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\chart-img\chart-6.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/down-arrow-white.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\down-arrow-white.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/down-arrow.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\down-arrow.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/canada.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\canada.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/eu.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\eu.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/france.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\france.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/japan.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\japan.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/newzland.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\newzland.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/uk.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\uk.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/flag/usa.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\flag\usa.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/hero/hero-img-2.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\hero\hero-img-2.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/hero/hero-img-3.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\hero\hero-img-3.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/hero/hero-shape-4.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\hero\hero-shape-4.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/hero/hero-shape-5.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\hero\hero-shape-5.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/hero/hero-shape-6.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\hero\hero-shape-6.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/night.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\night.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-1.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-1.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-2.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-2.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-3.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-3.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-4.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-4.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-5.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-5.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-6.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-6.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/partner/partner-7.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\partner\partner-7.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/shape-1.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\shape-1.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/shape-2.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\shape-2.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/shape-3.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\shape-3.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/shape-4.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\shape-4.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/shape-6.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\shape-6.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/sunny.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\sunny.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/testimonials/client-1.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\testimonials\client-1.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/testimonials/client-2.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\testimonials\client-2.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/testimonials/client-3.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\testimonials\client-3.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/testimonials/client-4.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\testimonials\client-4.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/testimonials/client-5.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\testimonials\client-5.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/why-choose-us/wh-img-4.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\why-choose-us\wh-img-4.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/why-choose-us/wh-img-5.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\why-choose-us\wh-img-5.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/why-choose-us/wh-img-6.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\why-choose-us\wh-img-6.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/img/why-choose-us/wh-img-7.jpg
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\img\why-choose-us\wh-img-7.jpg
+Content Type: image/jpeg
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/aos.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\aos.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/bootstrap.bundle.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\bootstrap.bundle.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/contact-form-script.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\contact-form-script.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/fancybox.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\fancybox.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/form-validator.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\form-validator.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/jquery.appear.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\jquery.appear.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/jquery.countdown.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\jquery.countdown.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/jquery.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\jquery.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/main.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\main.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/odometer.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\odometer.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/owl.carousel.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\owl.carousel.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/assets/js/tweenmax.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\assets\js\tweenmax.min.js
+Content Type: text/javascript
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/105536.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\105536.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/1086741.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\1086741.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/147258.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\147258.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/1907675.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\1907675.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/197375.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\197375.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/197582.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\197582.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/2780256.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\2780256.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/3130571.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\3130571.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/349221.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\349221.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/349228.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\349228.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/349230.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\349230.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/3527271.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\3527271.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/4221696.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\4221696.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/5207009.png
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\5207009.png
+Content Type: image/png
+
+Uri: https://bk1.timdigitalz.com/temp/custom/images/support.gif
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\temp\custom\images\support.gif
+Content Type: image/gif
+
+Uri: https://bk1.timdigitalz.com/terms
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\terms.html
+Content Type: text/html
+
+Uri: https://bk1.timdigitalz.com/terms-of-service
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\terms-of-service.html
+Content Type: text/html
+
+Uri: https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\npm\alpinejs@3.x.x\dist\cdn.min.js
+Content Type: application/javascript
+
+Uri: https://cdn.tailwindcss.com/3.4.17
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\3.4.17
+Content Type: text/javascript
+
+Uri: https://code.jquery.com/jquery-3.2.1.slim.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\jquery-3.2.1.slim.min.js
+Content Type: application/javascript
+
+Uri: https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\css2-1
+Content Type: text/css
+
+Uri: https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&amp;family=Roboto:wght@300;400;500;700;900&amp;display=swap
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\css2
+Content Type: text/css
+
+Uri: https://fonts.gstatic.com/s/lato/v25/S6u9w4BMUTPHh50Xew8.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\lato\v25\S6u9w4BMUTPHh50Xew8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/lato/v25/S6u9w4BMUTPHh6UVew8.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\lato\v25\S6u9w4BMUTPHh6UVew8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/lato/v25/S6u9w4BMUTPHh7USew8.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\lato\v25\S6u9w4BMUTPHh7USew8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/lato/v25/S6uyw4BMUTPHvxk.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\lato\v25\S6uyw4BMUTPHvxk.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVs9pYCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVs9pYCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVsEpYCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVsEpYCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVtaooCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVtaooCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVtapYCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVtapYCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVuEooCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVuEooCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvaooCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvaooCP.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/raleway/v37/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvoooCP.ttf
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\s\raleway\v37\1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvoooCP.ttf
+Content Type: font/ttf
+
+Uri: https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\translate_a\element.js
+Content Type: text/javascript
+
+Uri: https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js
+File Name: C:\Downloaded Web Sites\bk1.timdigitalz.com\lucide@0.562.0\dist\umd\lucide.min.js
+Content Type: text/javascript
+

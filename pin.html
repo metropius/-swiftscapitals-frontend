@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>swiftcaptial - PIN Verification</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Verify your PIN - swiftcaptial">
+    <link rel="shortcut icon" href="/assets/favicon.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#38bdf8', 100: '#38bdf8', 200: '#38bdf8', 300: '#38bdf8', 400: '#38bdf8',
+                            500: '#0ea5e9', 600: '#0ea5e9', 700: '#0369a1', 800: '#0369a1', 900: '#0369a1',
+                        },
+                        secondary: {
+                            50: '#5eead4', 100: '#5eead4', 200: '#5eead4', 300: '#5eead4', 400: '#5eead4',
+                            500: '#14b8a6', 600: '#14b8a6', 700: '#0f766e', 800: '#0f766e', 900: '#0f766e',
+                        }
+                    },
+                    fontFamily: { 'sans': ['Lato', 'sans-serif'] },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        .page-loading {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity .4s ease;
+        }
+        .page-loading.hidden { opacity: 0; pointer-events: none; }
+
+        .loader {
+            position: relative; width: 120px; height: 120px; margin: 0 auto 30px;
+        }
+        .loader-circle {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border: 4px solid transparent; border-top-color: #0ea5e9;
+            animation: spin 2s linear infinite;
+        }
+        .loader-circle:nth-child(2) {
+            border-top-color: transparent; border-right-color: #0ea5e9;
+            animation: spin 3s linear infinite;
+        }
+        .loader-circle:nth-child(3) {
+            width: 80%; height: 80%; top: 10%; left: 10%;
+            border-top-color: transparent; border-left-color: #38bdf8;
+            animation: spin 1.5s linear infinite reverse;
+        }
+        .loader-logo {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 40%; height: 40%; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .key {
+            aspect-ratio: 1/1;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 1rem;
+            font-size: 1.5rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            user-select: none;
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .key:active { transform: scale(0.95); }
+        .key:hover { background: #f0f9ff; border-color: #0ea5e9; }
+
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-900">
+
+    <!-- Loader -->
+    <div class="page-loading" id="pageLoader">
+        <div class="text-center">
+            <div class="loader">
+                <div class="loader-circle"></div>
+                <div class="loader-circle"></div>
+                <div class="loader-circle"></div>
+                <div class="loader-logo">
+                    <img src="/assets/logo.png" alt="Logo" class="w-3/4 h-auto" onerror="this.style.display='none'">
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500">Loading secure environment...</p>
+        </div>
+    </div>
+
+    <div class="min-h-screen flex flex-col">
+        <main class="flex-grow flex items-center justify-center px-4 py-12">
+            <div class="w-full max-w-md"
+                 x-data="{
+                    pin: '',
+                    maxLength: 4,
+                    isProcessing: false,
+                    errorMessage: '',
+                    successMessage: '',
+
+                    addDigit(digit) {
+                        if (this.pin.length < this.maxLength) {
+                            this.pin += digit;
+                            if (window.navigator.vibrate) window.navigator.vibrate(40);
+                        }
+                    },
+                    removeDigit() {
+                        this.pin = this.pin.slice(0, -1);
+                    },
+                    clearPin() {
+                        this.pin = '';
+                    },
+                    async submitPin() {
+                        if (this.pin.length !== this.maxLength) {
+                            this.errorMessage = 'Please enter all 4 digits';
+                            setTimeout(() => this.errorMessage = '', 3000);
+                            return;
+                        }
+
+                        this.isProcessing = true;
+                        this.errorMessage = '';
+                        this.successMessage = '';
+
+                        try {
+                            const res = await api.post('/verify-pin', { pin: this.pin });
+                            const result = res.data;
+
+                            if (result.success) {
+                                this.successMessage = result.message || 'PIN verified successfully!';
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Verified!',
+                                    text: this.successMessage,
+                                    timer: 1400,
+                                    showConfirmButton: false,
+                                    confirmButtonColor: '#0ea5e9'
+                                }).then(() => {
+                                    window.location.href = result.redirect || '/dashboard.html';
+                                });
+                            } else {
+                                this.errorMessage = result.message || 'Incorrect PIN. Please try again.';
+                                this.pin = '';
+                                // shake animation
+                                const display = document.querySelector('.pin-display');
+                                if (display) {
+                                    display.classList.add('animate-shake');
+                                    setTimeout(() => display.classList.remove('animate-shake'), 500);
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Invalid PIN',
+                                    text: this.errorMessage,
+                                    confirmButtonColor: '#0ea5e9'
+                                });
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            this.errorMessage = err.response?.data?.message || 'Connection error. Please try again.';
+                            this.pin = '';
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: this.errorMessage,
+                                confirmButtonColor: '#0ea5e9'
+                            });
+                        } finally {
+                            this.isProcessing = false;
+                        }
+                    }
+                 }"
+                 x-init="
+                    $watch('pin', value => {
+                        if (value.length === maxLength && !isProcessing) {
+                            setTimeout(() => submitPin(), 250);
+                        }
+                    });
+                 ">
+
+                <div class="w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+                    <!-- Header -->
+                    <div class="relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 py-10 px-6 text-center">
+                        <div class="absolute inset-0 overflow-hidden opacity-20">
+                            <div class="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full"></div>
+                            <div class="absolute bottom-0 right-0 w-32 h-32 bg-white rounded-full"></div>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-5">
+                                <i data-lucide="fingerprint" class="h-10 w-10 text-white"></i>
+                            </div>
+                            <h1 class="text-2xl font-bold text-white mb-1">Verify Your Identity</h1>
+                            <p class="text-white/90 text-sm">Enter your secure 4-digit PIN to continue</p>
+                        </div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="flex flex-col items-center pt-8 pb-2">
+                        <div class="relative">
+                            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                                <img id="userAvatar" src="" alt="User" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -right-1 -bottom-1 bg-primary-100 text-primary-700 p-1.5 rounded-full border-2 border-white">
+                                <i data-lucide="shield" class="h-5 w-5"></i>
+                            </div>
+                        </div>
+                        <h2 id="userFullName" class="mt-4 text-xl font-bold text-gray-800">Loading...</h2>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="px-6 text-center">
+                        <div x-show="errorMessage" x-transition class="text-red-600 text-sm font-medium mb-3" x-text="errorMessage"></div>
+                        <div x-show="successMessage" x-transition class="text-green-600 text-sm font-medium mb-3" x-text="successMessage"></div>
+                    </div>
+
+                    <!-- PIN Dots -->
+                    <div class="pin-display flex justify-center gap-4 mb-6 mt-2">
+                        <template x-for="i in maxLength">
+                            <div class="w-4 h-4 rounded-full transition-all duration-200"
+                                 :class="i <= pin.length ? 'bg-primary-600 scale-110' : 'bg-gray-200'"></div>
+                        </template>
+                    </div>
+
+                    <p class="text-xs text-gray-500 text-center mb-6 px-6">
+                        Enter the 4-digit PIN you created during registration
+                    </p>
+
+                    <!-- Mobile Keypad -->
+                    <div class="px-6 pb-6 md:hidden">
+                        <div class="keypad">
+                            <template x-for="n in 9">
+                                <button type="button" @click="addDigit(n)"
+                                        :disabled="isProcessing || pin.length >= maxLength"
+                                        class="key" :class="{'opacity-50': isProcessing || pin.length >= maxLength}">
+                                    <span x-text="n"></span>
+                                </button>
+                            </template>
+
+                            <button type="button" @click="clearPin()" :disabled="isProcessing || pin.length === 0"
+                                    class="key text-yellow-600" :class="{'opacity-50': isProcessing || pin.length === 0}">
+                                <i data-lucide="rotate-ccw" class="h-6 w-6"></i>
+                            </button>
+
+                            <button type="button" @click="addDigit(0)"
+                                    :disabled="isProcessing || pin.length >= maxLength"
+                                    class="key" :class="{'opacity-50': isProcessing || pin.length >= maxLength}">0</button>
+
+                            <button type="button" @click="removeDigit()" :disabled="isProcessing || pin.length === 0"
+                                    class="key" :class="{'opacity-50': isProcessing || pin.length === 0}">
+                                <i data-lucide="delete" class="h-6 w-6"></i>
+                            </button>
+                        </div>
+
+                        <button type="button" @click="submitPin()"
+                                :disabled="isProcessing || pin.length !== maxLength"
+                                class="w-full mt-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium flex items-center justify-center transition shadow-md"
+                                :class="{'opacity-50 cursor-not-allowed': isProcessing || pin.length !== maxLength}">
+                            <template x-if="!isProcessing">
+                                <span class="flex items-center"><i data-lucide="log-in" class="h-5 w-5 mr-2"></i> Verify PIN</span>
+                            </template>
+                            <template x-if="isProcessing">
+                                <span class="flex items-center">
+                                    <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                                    Verifying...
+                                </span>
+                            </template>
+                        </button>
+                    </div>
+
+                    <!-- Desktop Input -->
+                    <div class="px-6 pb-8 hidden md:block">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter your 4-digit PIN</label>
+                        <input id="desktop-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*"
+                               x-model="pin" :disabled="isProcessing"
+                               class="w-full px-4 py-3.5 border border-gray-300 rounded-xl text-center text-2xl tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="••••">
+
+                        <button type="button" @click="submitPin()"
+                                :disabled="isProcessing || pin.length !== maxLength"
+                                class="w-full mt-6 py-3.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium flex items-center justify-center transition shadow-md"
+                                :class="{'opacity-50 cursor-not-allowed': isProcessing || pin.length !== maxLength}">
+                            <template x-if="!isProcessing">
+                                <span class="flex items-center"><i data-lucide="shield-check" class="h-5 w-5 mr-2"></i> Verify PIN</span>
+                            </template>
+                            <template x-if="isProcessing">
+                                <span class="flex items-center">
+                                    <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                                    Processing...
+                                </span>
+                            </template>
+                        </button>
+                    </div>
+
+                    <!-- Footer note -->
+                    <div class="px-6 pb-8">
+                        <div class="flex items-center justify-center p-3 bg-gray-50 rounded-xl">
+                            <i data-lucide="lock" class="h-4 w-4 text-primary-500 mr-2"></i>
+                            <p class="text-xs text-gray-600">Your security is our priority. PIN verification protects your account.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="py-4 bg-white border-t border-gray-200 text-center">
+            <p class="text-sm text-gray-600">&copy; 2026 swiftcaptial. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Shared scripts -->
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Protect page
+            if (!isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Hide loader
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 700);
+
+            lucide.createIcons();
+
+            // Load user info from localStorage
+            const user = getCurrentUser();
+            if (user) {
+                const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.trim() || 'User';
+                document.getElementById('userFullName').textContent = fullName;
+
+                const avatar = document.getElementById('userAvatar');
+                avatar.src = user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0ea5e9&color=fff`;
+                avatar.alt = fullName;
+            }
+
+            // Desktop input: only numbers
+            const desktopPin = document.getElementById('desktop-pin');
+            if (desktopPin) {
+                desktopPin.focus();
+                desktopPin.addEventListener('keypress', (e) => {
+                    if (e.which < 48 || e.which > 57) e.preventDefault();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

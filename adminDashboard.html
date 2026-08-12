@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Admin Dashboard</title>
+    <meta name="description" content="Admin panel for swiftcaptial banking platform" />
+    <link rel="shortcut icon" href="storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1'},
+                        secondary: {500:'#14b8a6',600:'#0f766e'},
+                        accent: {500:'#ec4899',600:'#db2777'}
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: "Graphik", system-ui, sans-serif; }
+        .page-loading { position:fixed; inset:0; background:#fff; z-index:9999; transition:all .4s .2s; }
+        .page-loading.active { opacity:1; visibility:visible; }
+        .loading-animation { width:80px; height:80px; position:relative; }
+        .circle { position:absolute; inset:0; border:4px solid transparent; border-radius:50%; animation:rotateCircle 1.5s linear infinite; }
+        .circle:nth-child(1) { border-top-color:var(--primary-color); }
+        .circle:nth-child(2) { border-right-color:var(--primary-color-light); animation-delay:.2s; }
+        @keyframes rotateCircle { to { transform:rotate(360deg) } }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false }">
+
+        <!-- Sidebar (visible on desktop + toggled on mobile) -->
+        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'" 
+             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+            <div class="p-6 border-b border-gray-800">
+                <a href="/adminiRoute">
+                    <img src="storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto mx-auto">
+                </a>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <a href="/adminiRoute" class="flex items-center px-3 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                    <i data-lucide="home" class="w-5 h-5 mr-3"></i>
+                    Dashboard
+                </a>
+                
+                <a href="/all-cards" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i>
+                    All Cards
+                </a>
+                <a href="/allTransfer" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="send" class="w-5 h-5 mr-3"></i>
+                    All Transfers
+                </a>
+                <a href="/allFunding" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="download" class="w-5 h-5 mr-3"></i>
+                    All Deposits
+                </a>
+                <a href="/wallets" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="wallet" class="w-5 h-5 mr-3"></i>
+                    Wallets
+                </a>
+                <a href="/allRefund" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
+                    All Refunds
+                </a>
+                <a href="/allLoans" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
+                    All Loans
+                </a>
+                <a href="/allVerify" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                    <i data-lucide="shield-check" class="w-5 h-5 mr-3"></i>
+                    <span>All Verifications</span>
+                </a>
+                <a href="/allTickets" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
+                    Support Tickets
+                </a>
+                <div class="pt-6 mt-auto border-t border-gray-800">
+                    <a href="/logout" class="flex items-center px-3 py-3 rounded-lg text-red-400 hover:bg-gray-800">
+                        <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                        Logout
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-3 rounded-full shadow-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <!-- Topbar -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <h1 class="text-xl font-bold text-gray-900">Users Management</h1>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600 hidden md:block">
+                            <%= new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                        </span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main -->
+            <main class="flex-1 overflow-y-auto p-6">
+
+                <!-- Filters & Search -->
+                <div class="mb-6 flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
+                        <select id="statusFilter" class="w-full md:w-64 border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="all">All Users</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="bg-white shadow rounded-xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">S/N</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Country</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phone</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <% if (users && users.length > 0) { %>
+                                    <% users.forEach((user, index) => { %>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                <%= index + 1 + (page - 1) * 50 %>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm font-medium text-gray-900">
+                                                    <%= user.firstname %> <%= user.lastname %>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                <%= user.email %>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                <%= user.country || '—' %>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                <%= user.phone || '—' %>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full <%= user.isSuspended ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                                                    <%= user.isSuspended ? 'Suspended' : 'Active' %>
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div class="flex items-center space-x-3">
+                                                    <a href="/viewUser/<%= user._id %>" class="text-blue-600 hover:text-blue-800" title="View">
+                                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                                    </a>
+                                                    <a href="/editUser/<%= user._id %>" class="text-amber-600 hover:text-amber-800" title="Edit">
+                                                        <i data-lucide="edit-2" class="w-5 h-5"></i>
+                                                    </a>
+
+                                                    <button 
+                                                        data-id="<%= user._id %>"
+                                                        data-current="<%= user.isSuspended ? 'true' : 'false' %>"
+                                                        class="text-purple-600 hover:text-purple-800 toggle-suspend-btn"
+                                                        title="<%= user.isSuspended ? 'Unsuspend' : 'Suspend' %>">
+                                                        <i data-lucide="<%= user.isSuspended ? 'play' : 'pause' %>" class="w-5 h-5"></i>
+                                                    </button>
+
+                                                    <button 
+                                                        data-id="<%= user._id %>"
+                                                        data-name="<%= user.firstname %> <%= user.lastname %>"
+                                                        class="text-red-600 hover:text-red-800 delete-btn"
+                                                        title="Delete">
+                                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                            No users found
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <% if (totalPages > 1) { %>
+                        <div class="px-6 py-4 flex items-center justify-between border-t">
+                            <div class="text-sm text-gray-700">
+                                Showing page <%= page %> of <%= totalPages %>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a href="?page=<%= page > 1 ? page-1 : 1 %>&status=<%= status %>" 
+                                   class="px-4 py-2 border rounded-lg <%= page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100' %>">
+                                    Previous
+                                </a>
+                                <a href="?page=<%= page < totalPages ? page+1 : totalPages %>&status=<%= status %>" 
+                                   class="px-4 py-2 border rounded-lg <%= page === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100' %>">
+                                    Next
+                                </a>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Remove preloader
+        window.addEventListener('load', () => {
+            const preloader = document.querySelector('.page-loading');
+            if (preloader) preloader.classList.remove('active');
+        });
+
+        // Status filter
+        document.getElementById('statusFilter')?.addEventListener('change', (e) => {
+            const status = e.target.value;
+            window.location.href = `/adminiRoute?status=${status}&page=1`;
+        });
+
+        // Suspend / Unsuspend – now expects JSON
+        document.querySelectorAll('.toggle-suspend-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                const current = btn.dataset.current === 'true';
+                const actionText = current ? 'reactivate' : 'suspend';
+
+                const result = await Swal.fire({
+                    title: `Are you sure?`,
+                    text: `Do you want to ${actionText} this user?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: current ? '#10b981' : '#ef4444',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: `Yes, ${actionText.charAt(0).toUpperCase() + actionText.slice(1)}`
+                });
+
+                if (!result.isConfirmed) return;
+
+                try {
+                    const res = await fetch(`/suspendUser/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok || !data.success) {
+                        throw new Error(data.message || 'Failed to update suspension status');
+                    }
+
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: data.message || `User has been ${actionText}ed`,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    window.location.reload();
+                } catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: err.message || 'Something went wrong',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            });
+        });
+
+        // Delete user – now expects JSON
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+
+                const result = await Swal.fire({
+                    title: 'Delete User?',
+                    text: `Are you sure you want to permanently delete ${name}?`,
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Yes, Delete'
+                });
+
+                if (!result.isConfirmed) return;
+
+                try {
+                    const res = await fetch(`/deleteUser/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok || !data.success) {
+                        throw new Error(data.message || 'Failed to delete user');
+                    }
+
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted',
+                        text: data.message || 'User has been deleted',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    window.location.reload();
+                } catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: err.message || 'Failed to delete user',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>   

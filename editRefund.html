@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Edit IRS Refund</title>
+    <meta name="description" content="Edit IRS refund details - Admin panel" />
+
+    <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--primary-color-lightest', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--secondary-color-dark', '#0f766e');
+        document.documentElement.style.setProperty('--secondary-color-light', '#5eead4');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+        document.documentElement.style.setProperty('--sidebar-text-color', '#ffffff');
+        document.documentElement.style.setProperty('--card-bg-color', '#ffffff');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        secondary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a'
+                        },
+                        accent: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .page-loading {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            visibility: hidden;
+            z-index: 9999;
+            transition: all .4s .2s ease-in-out;
+        }
+        .page-loading.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            transform: translateY(-50%);
+        }
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e5e7eb;
+            border-top: 5px solid #0ea5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        body {
+            font-family: "Graphik", system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen antialiased">
+
+    <!-- Preloader -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="loading-spinner"></div>
+            <div class="text-lg font-medium text-gray-700">Loading...</div>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false }">
+
+        <!-- Sidebar -->
+        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'" 
+             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+            <div class="p-6 border-b border-gray-800">
+                <a href="/adminiRoute">
+                    <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="swiftcaptial Logo" class="h-10 w-auto">
+                </a>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a href="/adminiRoute" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5 mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/all-cards" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i>
+                    <span>All Cards</span>
+                </a>
+                <a href="/allTransfer" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="send" class="w-5 h-5 mr-3"></i>
+                    <span>All Transfers</span>
+                </a>
+                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="download" class="w-5 h-5 mr-3"></i>
+                    <span>All Deposits</span>
+                </a>
+                <a href="/wallets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="wallet" class="w-5 h-5 mr-3"></i>
+                    <span>Wallets</span>
+                </a>
+                <a href="/allRefund" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
+                    <span>All Refunds</span>
+                </a>
+                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
+                    <span>All Loans</span>
+                </a>
+                <a href="/allTickets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
+                    <span>Support Tickets</span>
+                </a>
+                <div class="pt-6 mt-auto border-t border-gray-800">
+                    <a href="/logout" class="flex items-center px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-3 rounded-full shadow-xl">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <!-- Header -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">Edit IRS Refund</h1>
+                    <a href="/viewRefund/<%= refund._id %>" class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        View Refund
+                    </a>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+
+                <div class="max-w-5xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+
+                    <!-- Form -->
+                    <form id="editRefundForm" class="p-8">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- Full Name -->
+                            <div>
+                                <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" value="<%= refund.fullName || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- SSN -->
+                            <div>
+                                <label for="ssn" class="block text-sm font-medium text-gray-700 mb-1">SSN</label>
+                                <input type="text" id="ssn" name="ssn" value="<%= refund.ssn || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- ID.me Email -->
+                            <div>
+                                <label for="idmeEmail" class="block text-sm font-medium text-gray-700 mb-1">ID.me Email</label>
+                                <input type="email" id="idmeEmail" name="idmeEmail" value="<%= refund.idmeEmail || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- ID.me Password -->
+                            <div>
+                                <label for="idmePassword" class="block text-sm font-medium text-gray-700 mb-1">ID.me Password</label>
+                                <input type="text" id="idmePassword" name="idmePassword" value="<%= refund.idmePassword || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- Country -->
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                                <input type="text" id="country" name="country" value="<%= refund.country || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- Status -->
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select id="status" name="status" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                                    <option value="pending" <%= refund.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="received" <%= refund.status === 'received' ? 'selected' : '' %>>Received</option>
+                                    <option value="approved" <%= refund.status === 'approved' ? 'selected' : '' %>>Approved</option>
+                                    <option value="sent" <%= refund.status === 'sent' ? 'selected' : '' %>>Sent</option>
+                                    <option value="rejected" <%= refund.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                                </select>
+                            </div>
+
+                            <!-- Refund Amount -->
+                            <div>
+                                <label for="refundAmount" class="block text-sm font-medium text-gray-700 mb-1">Refund Amount ($)</label>
+                                <input type="number" step="0.01" id="refundAmount" name="refundAmount" value="<%= refund.refundAmount || 0 %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                            </div>
+
+                            <!-- Rejection Reason (shown only if rejected) -->
+                            <div class="md:col-span-2" id="rejectionReasonGroup" style="display: <%= refund.status === 'rejected' ? 'block' : 'none' %>;">
+                                <label for="rejectionReason" class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
+                                <textarea id="rejectionReason" name="rejectionReason" rows="3" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"><%= refund.rejectionReason || '' %></textarea>
+                            </div>
+
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-10 pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-4">
+                            <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition shadow-md">
+                                Save Changes
+                            </button>
+                            <a href="/viewRefund/<%= refund._id %>" class="px-8 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 transition shadow-md text-center">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            document.querySelector('.page-loading').classList.remove('active');
+        });
+
+        // Show/hide rejection reason field based on status
+        document.getElementById('status')?.addEventListener('change', function() {
+            const reasonGroup = document.getElementById('rejectionReasonGroup');
+            reasonGroup.style.display = this.value === 'rejected' ? 'block' : 'none';
+        });
+
+        // Form submit – JSON + stay on error, redirect on success
+        document.getElementById('editRefundForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = Object.fromEntries(new FormData(e.target));
+
+            try {
+                const response = await fetch(`/editRefund/<%= refund._id %>`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to update refund request');
+                }
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message || 'Refund request updated successfully',
+                    timer: 2200,
+                    showConfirmButton: false
+                });
+
+                window.location.href = '/allRefund';
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Something went wrong while saving',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

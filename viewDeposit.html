@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | View Deposit</title>
+    <meta name="description" content="Deposit details view - Admin panel" />
+
+    <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1'},
+                        secondary: {500:'#14b8a6',600:'#0f766e'},
+                        accent: {500:'#ec4899',600:'#db2777'}
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: "Graphik", system-ui, sans-serif; }
+        .page-loading { position:fixed; inset:0; background:#fff; z-index:9999; transition:all .4s .2s; }
+        .page-loading.active { opacity:1; visibility:visible; }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false }">
+
+        <!-- Sidebar -->
+        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'" 
+             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+            <div class="p-6 border-b border-gray-800">
+                <a href="/adminiRoute">
+                    <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto mx-auto">
+                </a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a href="/adminiRoute" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5 mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/all-cards" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i>
+                    <span>All Cards</span>
+                </a>
+                <a href="/allTransfer" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="send" class="w-5 h-5 mr-3"></i>
+                    <span>All Transfers</span>
+                </a>
+                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                    <i data-lucide="download" class="w-5 h-5 mr-3"></i>
+                    <span>All Deposits</span>
+                </a>
+                <a href="/wallets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="wallet" class="w-5 h-5 mr-3"></i>
+                    <span>Wallets</span>
+                </a>
+                <a href="/allRefund" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
+                    <span>All Refunds</span>
+                </a>
+                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
+                    <span>All Loans</span>
+                </a>
+                <a href="/allTickets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
+                    <span>Support Tickets</span>
+                </a>
+                <div class="pt-6 mt-auto border-t border-gray-800">
+                    <a href="/logout" class="flex items-center px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile menu toggle -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-3 rounded-full shadow-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <h1 class="text-xl font-bold text-gray-900">Deposit Details</h1>
+                    <a href="/allFunding" class="text-blue-600 hover:underline flex items-center">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Deposits
+                    </a>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+
+                <div class="bg-white shadow rounded-xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
+                                D
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900">
+                                    <%= deposit.type %> Deposit
+                                </h2>
+                                <p class="text-gray-600"><%= deposit.amount %> - <%= deposit.status.charAt(0).toUpperCase() + deposit.status.slice(1) %></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Deposit Info -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Deposit Information</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Type</span>
+                                    <p class="font-medium"><%= deposit.type %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Amount</span>
+                                    <p class="font-medium text-green-600"><%= deposit.amount %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Status</span>
+                                    <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full 
+                                        <%= deposit.status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           deposit.status === 'rejected' ? 'bg-red-100 text-red-800' : 
+                                           'bg-yellow-100 text-yellow-800' %>">
+                                        <%= deposit.status.charAt(0).toUpperCase() + deposit.status.slice(1) %>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Narration</span>
+                                    <p class="font-medium"><%= deposit.narration || '—' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Owner Info -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Owner Information</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Full Name</span>
+                                    <p class="font-medium">
+                                        <%= deposit.owner?.firstname || '—' %> 
+                                        <%= deposit.owner?.lastname || '' %>
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Email</span>
+                                    <p class="font-medium"><%= deposit.owner?.email || '—' %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Phone</span>
+                                    <p class="font-medium"><%= deposit.owner?.phone || '—' %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Country</span>
+                                    <p class="font-medium"><%= deposit.owner?.country || '—' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Proof -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Payment Proof</h3>
+                            <% if (deposit.image) { %>
+                                <div class="mt-2">
+                                    <img src="<%= deposit.image %>" alt="Deposit Proof" class="max-w-full h-auto rounded-lg shadow-md object-contain">
+                                </div>
+                            <% } else { %>
+                                <p class="text-gray-500 italic">No proof image uploaded</p>
+                            <% } %>
+                        </div>
+
+                        <!-- Timestamps -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Timestamps</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Created At</span>
+                                    <p class="font-medium"><%= new Date(deposit.createdAt).toLocaleString() %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Last Updated</span>
+                                    <p class="font-medium"><%= new Date(deposit.updatedAt).toLocaleString() %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t bg-gray-50 flex justify-end space-x-4">
+                        <a href="/editDeposit/<%= deposit._id %>" class="px-6 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">
+                            Edit Deposit
+                        </a>
+                        <a href="/allFunding" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            document.querySelector('.page-loading').classList.remove('active');
+        });
+    </script>
+</body>
+</html>

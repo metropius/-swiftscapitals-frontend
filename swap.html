@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Swap USD to Bitcoin</title>
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial." />
+    <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+    
+    <!-- Theme setup -->
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--primary-color-lightest', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--secondary-color-dark', '#0f766e');
+        document.documentElement.style.setProperty('--secondary-color-light', '#5eead4');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+        document.documentElement.style.setProperty('--sidebar-text-color', '#ffffff');
+        document.documentElement.style.setProperty('--card-bg-color', '#ffffff');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {50:'#38bdf8',100:'#38bdf8',200:'#38bdf8',300:'#38bdf8',400:'#38bdf8',500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1',800:'#0369a1',900:'#0369a1'},
+                        secondary: {50:'#5eead4',100:'#5eead4',200:'#5eead4',300:'#5eead4',400:'#5eead4',500:'#14b8a6',600:'#14b8a6',700:'#0f766e',800:'#0f766e',900:'#0f766e'},
+                        accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899',600:'#db2777',700:'#be185d',800:'#9d174d',900:'#831843'}
+                    },
+                    boxShadow: {'soft':'0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)'},
+                    animation: {'pulse-slow':'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'}
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        @font-face {font-family:Graphik;font-weight:400;src:url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikRegular.otf");}
+        @font-face {font-family:Graphik;font-weight:500;src:url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikRegular.otf");}
+        @font-face {font-family:Graphik;font-weight:700;src:url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikMedium.otf");}
+        @font-face {font-family:Graphik;font-weight:800;src:url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikBold.otf ");}
+        @font-face {font-family:Graphik;font-weight:900;src:url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikMedium.otf");}
+        body {font-family:"Graphik",sans-serif;}
+
+        .page-loading {position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background:#fff;visibility:hidden;z-index:9999;transition:all .4s .2s ease-in-out}
+        .page-loading.active{opacity:1;visibility:visible}
+        .page-loading-inner{position:absolute;top:50%;left:0;width:100%;text-align:center;transform:translateY(-50%);transition:opacity .2s ease-in-out;opacity:0}
+        .page-loading.active>.page-loading-inner{opacity:1}
+        .loading-container{display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .loading-animation{display:flex;align-items:center;justify-content:center;width:80px;height:80px;margin-bottom:1rem;position:relative}
+        .loading-animation .circle{position:absolute;width:100%;height:100%;border-radius:50%;border:4px solid transparent;mix-blend-mode:overlay;animation:rotateCircle 1.5s linear infinite}
+        .loading-animation .circle:nth-child(1){border-top-color:var(--primary-color);animation-delay:0s}
+        .loading-animation .circle:nth-child(2){border-right-color:var(--primary-color-light);animation-delay:.2s}
+        .loading-animation .circle:nth-child(3){border-bottom-color:var(--secondary-color);animation-delay:.4s}
+        .loading-animation .circle:nth-child(4){border-left-color:var(--primary-color-lightest);animation-delay:.6s}
+        .loading-animation .core{width:20px;height:20px;border-radius:50%;background:linear-gradient(45deg,var(--primary-color-light),var(--primary-color-dark));box-shadow:0 0 15px rgba(59,130,246,.5);animation:pulse 1s ease-in-out infinite alternate}
+        .page-loading .text{color:var(--primary-color);font-weight:500;letter-spacing:.05em;margin-top:.5rem;font-size:.875rem;background:linear-gradient(90deg,var(--primary-color-dark),var(--primary-color-light),var(--primary-color-dark));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient 2s linear infinite}
+        @keyframes rotateCircle{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        @keyframes pulse{from{transform:scale(.8);opacity:.8}to{transform:scale(1.2);opacity:1}}
+        @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        ::-webkit-scrollbar{width:8px;height:8px}
+        ::-webkit-scrollbar-track{background:#f1f5f9}
+        ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+        ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+    </style>
+
+    <!-- PWA manifest and splash screens -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PWA">
+    <link rel="icon" sizes="512x512" href="/images/icons/icon-512x512.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="PWA">
+    <link rel="apple-touch-icon" href="/images/icons/icon-512x512.png">
+
+    <link href="/images/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1242x2208.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/icons/icon-512x512.png">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js', {scope: '.'})
+                .then(reg => console.log('Service Worker Registered'))
+                .catch(err => console.log('Service Worker Error:', err));
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Page Loader -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="loading-container">
+                <div class="loading-animation">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="core"></div>
+                </div>
+                <div class="text">swiftcaptial Banking</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex h-screen overflow-hidden" x-data="{
+        sidebarOpen: false,
+        mobileMenuOpen: false,
+        userDropdownOpen: false,
+        notificationsOpen: false,
+        balanceType: 'usd',
+        toggleBalanceType() { this.balanceType = this.balanceType === 'usd' ? 'btc' : 'usd'; },
+        showBankAccount: false,
+        showSendMoney: false,
+        currentTime: '',
+        greeting: '',
+        currentDate: '',
+        balanceVisible: true,
+        toggleBalance() { this.balanceVisible = !this.balanceVisible; },
+        updateTime() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2,'0');
+            const m = now.getMinutes().toString().padStart(2,'0');
+            const s = now.getSeconds().toString().padStart(2,'0');
+            this.currentTime = `${h}:${m}:${s}`;
+            if (now.getHours() < 12) this.greeting = 'Good Morning';
+            else if (now.getHours() < 18) this.greeting = 'Good Afternoon';
+            else this.greeting = 'Good Evening';
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            this.currentDate = now.toLocaleDateString(undefined, options);
+        }
+    }" x-init="updateTime(); setInterval(() => updateTime(), 1000)">
+
+        <!-- Sidebar - Desktop -->
+        <div class="hidden md:flex md:w-64 md:flex-col bg-white h-full border-r border-gray-200 shadow-sm">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                <!-- Logo -->
+                <div class="flex items-center justify-center flex-shrink-0 px-4 mb-6">
+                    <a href="/dashboard" class="flex items-center">
+                        <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+
+                <!-- User Info Card -->
+                <div class="px-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-3">
+                            <div class="flex-shrink-0 mr-3">
+                                <img 
+                                    src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                    alt="<%= user.firstname %> <%= user.lastname %>"
+                                    onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'"
+                                    class="h-10 w-10 rounded-full object-cover border-2 border-primary-100">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    <%= user.firstname %> <%= user.lastname %>
+                                </p>
+                                <p class="text-xs text-gray-500 truncate">
+                                    ID: <%= user._id %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <a href="/verify-account" class="flex items-center justify-center py-1 rounded-md bg-red-50 border border-red-100 hover:bg-red-100 transition-colors">
+                                <span class="text-xs text-red-800 font-medium flex items-center">
+                                    <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify KYC
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <a href="/account-settings" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
+                            </a>
+                            <a href="/logout" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                                <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Items -->
+                <nav class="flex-1 px-4 space-y-1">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Main Menu</p>
+                    
+                    <a href="/dashboard" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-primary-50 text-black border-l-4 border-primary-500 pl-2">
+                        <i data-lucide="home" class="mr-3 h-5 w-5 text-black"></i>
+                        Dashboard
+                    </a>
+                    
+                    <a href="/accounthistory/<%= user._id %>" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="activity" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Transactions
+                    </a>
+                    
+                    <a href="/cards" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Cards
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Transfers</p>
+                    
+                    <a href="/localtransfer" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="send" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Local Transfer
+                    </a>
+                    
+                    <a href="/internationaltransfer" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="globe" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        International Wire
+                    </a>
+                    
+                    <a href="/deposits" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="download" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Deposit
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Services</p>
+                    
+                    <a href="/loan" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Loan Request
+                    </a>
+                    
+                    <a href="/irs-refund" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="receipt" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        IRS Tax Refund
+                    </a>
+                    
+                    <a href="/viewloan/<%= user._id %>" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="history" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Loan History
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Account</p>
+                    
+                    <a href="/account-settings" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="settings" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Settings
+                    </a>
+                    
+                    <a href="/support" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="help-circle" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Support Ticket
+                    </a>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-green-500 mr-2"></i>
+                        <span class="text-xs text-gray-500">Secure Banking</span>
+                    </div>
+                    <span class="text-xs text-gray-400">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm z-20">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center md:hidden">
+                        <button 
+                            @click="sidebarOpen = false; mobileMenuOpen = !mobileMenuOpen" 
+                            type="button" 
+                            class="text-gray-500 hover:text-gray-600 focus:outline-none"
+                            aria-label="Toggle menu">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <a href="/dashboard" class="ml-4">
+                            <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-8 w-auto">
+                        </a>
+                    </div>
+
+                    <div class="hidden md:flex md:flex-1 md:items-center">
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i data-lucide="calendar" class="h-4 w-4 mr-2 text-gray-400"></i>
+                            <span x-text="currentDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Balance indicator with USD/BTC toggle (desktop only) -->
+                        <div class="hidden md:flex items-center px-3 py-1.5 bg-primary-50 rounded-full">
+                            <i data-lucide="wallet" class="h-4 w-4 text-gray-900 mr-2"></i>
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium text-gray-900" x-show="balanceType === 'usd'">
+                                    <%= user.currency %> <%= user.balance %>
+                                </span>
+                                <span class="text-sm font-medium text-gray-900" x-show="balanceType === 'btc'">
+                                    ₿ <%= user.btcBalance.toFixed(6) %>
+                                </span>
+                                <button @click="toggleBalanceType()" class="ml-2 text-gray-500 hover:text-primary-600">
+                                    <i x-show="balanceType === 'usd'" data-lucide="toggle-right" class="h-5 w-5"></i>
+                                    <i x-show="balanceType === 'btc'" data-lucide="toggle-left" class="h-5 w-5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                      
+
+                        <!-- User Profile Dropdown -->
+                        <div class="relative">
+                            <button 
+                                @click="userDropdownOpen = !userDropdownOpen; notificationsOpen = false" 
+                                class="flex items-center max-w-xs text-sm rounded-full focus:outline-none">
+                                <img class="h-8 w-8 rounded-full object-cover border-2 border-gray-200" 
+                                     src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                     alt="<%= user.firstname %> <%= user.lastname %>"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'">
+                            </button>
+
+                            <div x-show="userDropdownOpen" @click.away="userDropdownOpen = false" 
+                                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" 
+                                 x-transition>
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-sm font-medium text-gray-900"><%= user.firstname %> <%= user.lastname %></p>
+                                    <p class="text-xs text-gray-500 mt-1">ID: <%= user._id %></p>
+                                    <div class="mt-2">
+                                        <a href="/verify-account" class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 hover:bg-red-200 flex items-center w-max">
+                                            <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify Account
+                                        </a>
+                                    </div>
+                                </div>
+                                <a href="/support" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="help-circle" class="h-4 w-4 mr-3 text-gray-500"></i> Support Ticket
+                                </a>
+                                <a href="/account-settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> My Profile
+                                </a>
+                                <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu Popup -->
+            <div x-show="mobileMenuOpen" class="fixed inset-0 flex items-center justify-center z-40 md:hidden" x-transition>
+                <div class="fixed inset-0 bg-black bg-opacity-50" @click="mobileMenuOpen = false"></div>
+                <div class="relative w-11/12 max-w-md bg-white rounded-2xl shadow-2xl p-5 z-50">
+                    <button type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500" @click="mobileMenuOpen = false">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+
+                    <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+                        <div class="flex-shrink-0 mr-3">
+                            <img 
+                                src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                class="h-12 w-12 rounded-full object-cover border-2 border-primary-100"
+                                alt="<%= user.firstname %> <%= user.lastname %>"
+                                onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'">
+                        </div>
+                        <div>
+                            <h2 class="text-base font-semibold text-gray-900"><%= user.firstname %> <%= user.lastname %></h2>
+                            <p class="text-sm text-gray-500">Account: <%= user.account_no || user._id %></p>
+                            <div class="mt-1">
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800 inline-flex items-center">
+                                    <i data-lucide="clock" class="h-3 w-3 mr-1"></i> Under Review
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-5">
+                        <h2 class="text-xl font-bold text-gray-800">Banking Menu</h2>
+                        <p class="text-sm text-gray-500">Select an option to continue</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="/dashboard" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="home" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Home</span>
+                            </div>
+                        </a>
+                        <a href="/accounthistory/<%= user._id %>" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="activity" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Activity</span>
+                            </div>
+                        </a>
+                        <a href="/cards" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="credit-card" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Cards</span>
+                            </div>
+                        </a>
+                        <a href="/localtransfer" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="send" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Transfer</span>
+                            </div>
+                        </a>
+                        <a href="/internationaltransfer" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="globe" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Int'l Wire</span>
+                            </div>
+                        </a>
+                        <a href="/deposits" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="download" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Deposit</span>
+                            </div>
+                        </a>
+                        <a href="/loan" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="credit-card" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Loan</span>
+                            </div>
+                        </a>
+                        <a href="/irs-refund" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="receipt" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">IRS Refund</span>
+                            </div>
+                        </a>
+                        <a href="/account-settings" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="settings" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Settings</span>
+                            </div>
+                        </a>
+                        <a href="/support" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="help-circle" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Support</span>
+                            </div>
+                        </a>
+                        <a href="/logout" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 hover:from-accent-100 hover:to-accent-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Logout</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Bar -->
+            <div class="fixed bottom-0 left-0 right-0 md:hidden z-30">
+                <div class="bg-white border-t border-gray-200 shadow-lg rounded-t-3xl mx-2 mb-1">
+                    <div class="flex justify-between items-center px-6 py-3 relative">
+                        <a href="/dashboard" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="home" class="h-5 w-5 text-primary-600"></i>
+                            </div>
+                            <span class="text-xs font-medium text-primary-600">Home</span>
+                        </a>
+                        <a href="/accounthistory/<%= user._id %>" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="bar-chart-2" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Stats</span>
+                        </a>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0">
+                            <button @click="mobileMenuOpen = true" 
+                                    class="bg-gradient-to-r from-primary-600 to-primary-800 w-16 h-16 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                                <i data-lucide="grid" class="h-8 w-8 text-white"></i>
+                            </button>
+                        </div>
+                        <a href="/cards" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="credit-card" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Cards</span>
+                        </a>
+                        <a href="/account-settings" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content - Swap Form -->
+            <main class="flex-1 overflow-y-auto pb-20 md:pb-0">
+                <div class="py-6">
+                    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                        <div class="mb-8">
+                            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Swap USD to Bitcoin</h1>
+                            <p class="mt-2 text-gray-600">Convert your available balance to Bitcoin instantly</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-soft border border-gray-200 overflow-hidden">
+                            <div class="p-6 md:p-8">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Source Balance</label>
+                                        <select id="balanceSource" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                            <option value="main" selected>Main USD Balance</option>
+                                            <option value="card">Card Balance</option>
+                                            <option value="irs">IRS Refund Balance</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Available Amount</label>
+                                        <div id="availableDisplay" class="text-3xl font-bold text-primary-600">
+                                            <%= user.currency %><%= Number(user.balance).toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-left md:text-right">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Your BTC Balance</label>
+                                        <div class="text-3xl font-bold text-yellow-600">
+                                            <%= (user.btcBalance || 0).toFixed(8) %> BTC
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form id="swapForm" class="space-y-8">
+                                    <div>
+                                        <label for="usdAmount" class="block text-sm font-medium text-gray-700 mb-2">
+                                            Amount in USD to Swap <span class="text-red-600 font-medium">(Minimum $50)</span>
+                                        </label>
+                                        <input 
+                                            type="number" 
+                                            name="amount" 
+                                            id="usdAmount" 
+                                            step="0.01" 
+                                            min="50" 
+                                            placeholder="Enter USD amount" 
+                                            required 
+                                            class="w-full px-5 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-xl transition-all shadow-sm"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">You will receive (BTC)</label>
+                                        <input 
+                                            type="text" 
+                                            id="btcAmount" 
+                                            readonly 
+                                            placeholder="Real-time calculation" 
+                                            class="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-xl text-xl font-medium text-gray-900 cursor-not-allowed shadow-sm"
+                                        />
+                                    </div>
+
+                                    <div class="pt-6">
+                                        <button 
+                                            type="submit" 
+                                            class="w-full px-8 py-4 bg-primary-600 text-white font-medium text-xl rounded-xl hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
+                                        >
+                                            Swap Now
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 hidden md:block">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:flex md:items-center md:justify-between">
+                    <div class="flex items-center">
+                        <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-6 w-auto mr-2">
+                        <p class="text-sm text-gray-500">© 2026 swiftcaptial. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Terms of Service</a>
+                        <a href="/support" class="text-sm text-gray-500 hover:text-gray-700">Contact Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', function() {
+            const preloader = document.querySelector('.page-loading');
+            setTimeout(function() {
+                preloader.classList.remove('active');
+                setTimeout(function() { preloader.remove(); }, 500);
+            }, 800);
+        });
+    </script>
+
+    <!-- Real-time BTC price + amount calculation + source balance switch -->
+    <script>
+        const balanceSourceSelect = document.getElementById('balanceSource');
+        const availableDisplay   = document.getElementById('availableDisplay');
+        const usdInput           = document.getElementById('usdAmount');
+        const btcOutput          = document.getElementById('btcAmount');
+        const swapForm           = document.getElementById('swapForm');
+
+        let currentAvailable = {
+            main: <%= Number(user.balance) || 0 %>,
+            card: <%= user.cards && user.cards.length > 0 ? user.cards[0].balance || 0 : 0 %>,
+            irs:  0   // We'll fetch this dynamically or set default 0
+        };
+
+        // For simplicity we show only first card balance
+        // In real app you would probably let user select which card
+
+        function updateAvailableDisplay() {
+            const source = balanceSourceSelect.value;
+            const amount = currentAvailable[source] || 0;
+            availableDisplay.textContent = 
+                `<%= user.currency %>${Number(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        balanceSourceSelect.addEventListener('change', updateAvailableDisplay);
+        updateAvailableDisplay();
+
+        // Real-time BTC conversion
+        async function updateBTCAmount() {
+            const usd = parseFloat(usdInput.value) || 0;
+            if (usd === 0) {
+                btcOutput.value = '';
+                return;
+            }
+
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+                if (!res.ok) throw new Error('Price fetch failed');
+                const data = await res.json();
+                const btcPrice = data.bitcoin.usd;
+                const btc = usd / btcPrice;
+                btcOutput.value = btc.toFixed(8) + ' BTC';
+            } catch (err) {
+                btcOutput.value = 'Error fetching price';
+            }
+        }
+
+        usdInput.addEventListener('input', updateBTCAmount);
+
+        // Form submission with client-side validation + AJAX
+        swapForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const amount = parseFloat(usdInput.value);
+            const source = balanceSourceSelect.value;
+
+            if (!amount || amount < 50) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Amount',
+                    text: 'Minimum swap amount is $50',
+                    confirmButtonColor: '#d33'
+                });
+                return;
+            }
+
+            if (amount > currentAvailable[source]) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Insufficient Balance',
+                    text: `You only have <%= user.currency %>${Number(currentAvailable[source]).toLocaleString('en-US', {minimumFractionDigits: 2})} available in this balance.`,
+                    confirmButtonColor: '#d33'
+                });
+                return;
+            }
+
+            // Submit via fetch
+            try {
+                const formData = new FormData();
+                formData.append('amount', amount);
+                formData.append('source', source);
+
+                const response = await fetch('/swap/<%= user._id %>', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Swap Failed',
+                        text: result.error || 'An error occurred during swap.',
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+
+                // Success → show message & reload
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Swap Successful!',
+                    text: result.message || `Swapped $${amount.toFixed(2)} to Bitcoin`,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                });
+
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Connection Error',
+                    text: 'Could not complete the swap. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    </script>
+
+    <!-- Flash messages from server (for page load) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const errors   = <%- JSON.stringify(messages.error   || []) %>;
+            const successes = <%- JSON.stringify(messages.success || []) %>;
+
+            errors.forEach(msg => {
+                Swal.fire({ icon: 'error', title: 'Error', text: msg, confirmButtonColor: '#d33' });
+            });
+
+            successes.forEach(msg => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: msg,
+                    confirmButtonColor: '#0ea5e9',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

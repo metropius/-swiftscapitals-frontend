@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Verify Email - swiftcaptial</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="nFjo8DN9IgSFCKEb0cu0x6h32ABnwks9ZLDgW18T">
+    <meta name="robots" content="index, follow">
+    <meta name="apple-mobile-web-app-title" content="swiftcaptial">
+    <meta name="application-name" content="swiftcaptial">
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial.">
+    <link rel="shortcut icon" href="storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png">
+    
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#38bdf8',
+                            100: '#38bdf8',
+                            200: '#38bdf8',
+                            300: '#38bdf8',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0ea5e9',
+                            700: '#0369a1',
+                            800: '#0369a1',
+                            900: '#0369a1',
+                        },
+                        secondary: {
+                            50: '#5eead4',
+                            100: '#5eead4',
+                            200: '#5eead4',
+                            300: '#5eead4',
+                            400: '#5eead4',
+                            500: '#14b8a6',
+                            600: '#14b8a6',
+                            700: '#0f766e',
+                            800: '#0f766e',
+                            900: '#0f766e',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Lato', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Variables -->
+    <script>
+        // Set CSS theme variables
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--secondary-color-dark', '#0f766e');
+        document.documentElement.style.setProperty('--secondary-color-light', '#5eead4');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--card-bg-color', '#ffffff');
+    </script>
+    
+        
+    <!-- Modern Loading Animation -->
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all .4s .2s ease-in-out;
+            background-color: #ffffff;
+            visibility: hidden;
+            z-index: 9999;
+        }
+        .page-loading.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            transform: translateY(-50%);
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+        .page-loading.active>.page-loading-inner {
+            opacity: 1;
+        }
+        
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .loading-animation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .loading-animation .circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            mix-blend-mode: overlay;
+            animation: rotateCircle 1.5s linear infinite;
+        }
+        
+        .loading-animation .circle:nth-child(1) {
+            border-top-color: var(--primary-color);
+            animation-delay: 0s;
+        }
+        
+        .loading-animation .circle:nth-child(2) {
+            border-right-color: var(--primary-color-light);
+            animation-delay: 0.2s;
+        }
+        
+        .loading-animation .circle:nth-child(3) {
+            border-bottom-color: var(--secondary-color);
+            animation-delay: 0.4s;
+        }
+        
+        .loading-animation .circle:nth-child(4) {
+            border-left-color: var(--primary-color-light);
+            animation-delay: 0.6s;
+        }
+        
+        .loading-animation .core {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color-light), var(--primary-color-dark));
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+        
+        .page-loading .text {
+            color: var(--primary-color);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            background: linear-gradient(90deg, var(--primary-color-dark), var(--primary-color-light), var(--primary-color-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 2s linear infinite;
+        }
+        
+        @keyframes  rotateCircle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes  pulse {
+            from { transform: scale(0.8); opacity: 0.8; }
+            to { transform: scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes  gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Floating elements animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        .floating-slow {
+            animation: floating 6s ease-in-out infinite;
+        }
+        .floating-slower {
+            animation: floating 8s ease-in-out infinite;
+        }
+        
+        @keyframes  floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Interactive elements */
+        .input-wrapper {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .input-wrapper:focus-within {
+            transform: translateY(-2px);
+        }
+        
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
+            color: #94a3b8;
+            transition: color 0.3s ease;
+        }
+        
+        .input-wrapper:focus-within .input-icon {
+            color: var(--primary-color);
+        }
+        
+        input:focus + .input-toggle {
+            color: var(--primary-color);
+        }
+    </style>
+    <!-- Web Application Manifest -->
+<link rel="manifest" href="manifest.json">
+<!-- Chrome for Android theme color -->
+<meta name="theme-color" content="#000000">
+
+<!-- Add to homescreen for Chrome on Android -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="PWA">
+<link rel="icon" sizes="512x512" href="/images/icons/icon-512x512.png">
+
+<!-- Add to homescreen for Safari on iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="PWA">
+<link rel="apple-touch-icon" href="/images/icons/icon-512x512.png">
+
+
+<link href="/images/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1242x2208.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+<link href="/images/icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+
+<!-- Tile for Win8 -->
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/images/icons/icon-512x512.png">
+
+<script type="text/javascript">
+    // Initialize the service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/serviceworker.js', {
+            scope: '.'
+        }).then(function (registration) {
+            // Registration was successful
+            console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+            // registration failed :(
+            console.log('Laravel PWA: ServiceWorker registration failed: ', err);
+        });
+    }
+</script></head>
+
+<body class="font-sans bg-gray-50 text-gray-900 flex min-h-screen">
+    <!-- Page Loader -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="loading-container">
+                <div class="loading-animation">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="core"></div>
+                </div>
+                <div class="text">swiftcaptial</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="w-full">
+        
+<div class="container py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Card Header -->
+        <div class="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-5">
+            <div class="flex items-center justify-center">
+                <div class="bg-white/20 backdrop-blur-sm p-3 rounded-full">
+                    <i data-lucide="mail" class="h-10 w-10 text-white"></i>
+                </div>
+            </div>
+            <h1 class="text-white text-center font-bold text-2xl mt-4">Verify Your Email Address</h1>
+            <p class="text-white/80 text-center mt-2">Please check your inbox for the verification link</p>
+        </div>
+        
+        <!-- Card Content -->
+        <div class="p-6 sm:p-8">
+            <!-- Alerts -->
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-md">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-green-800">Success</h3>
+                            <p class="text-sm text-green-700 mt-1">Your registration is successful. A verification link has been sent to your email address, please click on the link to verify your email address.</p>
+                        </div>
+                        <div class="ml-auto pl-3">
+                            <div class="-mx-1.5 -my-1.5">
+                                <button type="button" class="inline-flex rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" onclick="this.parentElement.parentElement.parentElement.remove()">
+                                    <i data-lucide="x" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                        
+            <!-- Main Content -->
+            <div class="text-center pt-4">
+                <div class="inline-flex items-center justify-center h-24 w-24 rounded-full bg-primary-50 mb-6">
+                    <i data-lucide="mail-check" class="h-12 w-12 text-primary-600"></i>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Check your inbox</h2>
+                <p class="text-gray-600 mb-6">We've sent you an email with a link to confirm your account</p>
+                
+                <div class="bg-gray-50 rounded-lg p-5 text-left mb-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Didn't get the email?</h3>
+                    <ul class="list-decimal pl-5 text-gray-600 space-y-2">
+                        <li>The email may be in your spam folder</li>
+                        <li>The email address you entered might have a typo</li>
+                        <li>You may have accidentally entered another email address (Usually happens with auto-complete)</li>
+                        <li>We can't deliver the email to this address (Usually because of corporate firewalls or filtering)</li>
+                    </ul>
+                </div>
+                
+                <!-- Actions -->
+                <div class="space-y-4">
+               
+                    
+                    <a href="/logout"  
+                       class="inline-flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        <i data-lucide="log-out" class="h-5 w-5 mr-2 text-gray-400"></i>
+                        Sign Out
+                    </a>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+
+     <!-- SweetAlert for query param messages -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const success = urlParams.get('success');
+      const error = urlParams.get('error');
+
+      if (success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: decodeURIComponent(success),
+          confirmButtonColor: '#3F3EED',
+          timer: 5000,
+          timerProgressBar: true
+        });
+      } else if (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: decodeURIComponent(error),
+          confirmButtonColor: '#3F3EED'
+        });
+      }
+    });
+  </script>
+    
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+    
+    <!-- Enhanced Page Loading Animation -->
+    <script>
+        window.onload = function() {
+            const preloader = document.querySelector('.page-loading');
+            
+            // Add a slight delay to make loading animation more noticeable
+            setTimeout(function() {
+                preloader.classList.remove('active');
+                setTimeout(function() {
+                    preloader.remove();
+                }, 500);
+            }, 800);
+        };
+    </script>
+    <script>
+        
+    </script>
+    
+    <!-- Tidio Chat -->
+        
+    <!-- Additional Scripts -->
+    </body>
+</html>

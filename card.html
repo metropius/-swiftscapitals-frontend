@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Cards</title>
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial.">
+    <link rel="shortcut icon" href="/assets/favicon.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {50:'#38bdf8',100:'#38bdf8',200:'#38bdf8',300:'#38bdf8',400:'#38bdf8',500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1',800:'#0369a1',900:'#0369a1'},
+                        secondary: {50:'#5eead4',100:'#5eead4',200:'#5eead4',300:'#5eead4',400:'#5eead4',500:'#14b8a6',600:'#14b8a6',700:'#0f766e',800:'#0f766e',900:'#0f766e'},
+                        accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899',600:'#db2777',700:'#be185d',800:'#9d174d',900:'#831843'}
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .page-loading {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        .page-loading.hidden { opacity: 0; pointer-events: none; }
+
+        /* Credit Card Modal Styles */
+        .credit-card {
+            width: 100%;
+            max-width: 420px;
+            height: 265px;
+            perspective: 1500px;
+            margin: 0 auto;
+        }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .card-flipped .card-inner { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .card-front {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-back {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .card-logo { font-size: 1.8rem; font-weight: bold; letter-spacing: 4px; opacity: 0.95; }
+        .chip {
+            width: 55px; height: 42px;
+            background: linear-gradient(135deg, #c9a96e, #f0d49c);
+            border-radius: 8px;
+            margin: 30px 0 20px;
+        }
+        .card-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+        .card-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .card-holder-label, .card-expiry-label {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+        .holder-name, .expiry-date {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .magnetic-stripe { height: 50px; background: #000; margin: 25px 0 15px; }
+        .signature-panel {
+            height: 45px;
+            background: #e0e0e0;
+            margin: 0 0 15px;
+            border-radius: 6px;
+            position: relative;
+        }
+        .cvv-box {
+            background: white;
+            color: black;
+            width: 60px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 6px;
+            position: absolute;
+            right: 20px;
+            top: 18px;
+        }
+        .issuer-text { font-size: 0.75rem; opacity: 0.7; text-align: right; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Loader -->
+    <div class="page-loading" id="pageLoader">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-primary-600 font-medium">Loading Cards...</p>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden" 
+         x-data="{ 
+            sidebarOpen: false, 
+            mobileMenuOpen: false, 
+            userDropdownOpen: false,
+            cardModalOpen: false, 
+            selectedCard: null, 
+            cardFlipped: false 
+         }">
+
+        <!-- ========== SIDEBAR ========== -->
+        <div class="hidden md:flex md:w-64 md:flex-col bg-white h-full border-r border-gray-200 shadow-sm">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                <div class="flex items-center justify-center flex-shrink-0 px-4 mb-6">
+                    <a href="dashboard.html">
+                        <img src="/assets/logo.png" alt="Logo" class="h-10 w-auto" onerror="this.style.display='none'">
+                    </a>
+                </div>
+
+                <!-- User Card -->
+                <div class="px-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-3">
+                            <img id="sidebar-user-image" src="" class="h-10 w-10 rounded-full object-cover border-2 border-primary-100 mr-3" alt="">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate" id="sidebar-user-name">Loading...</p>
+                                <p class="text-xs text-gray-500 truncate" id="sidebar-user-id">ID: ...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <a href="verify-account.html" class="flex items-center justify-center py-1 rounded-md bg-red-50 border border-red-100 hover:bg-red-100">
+                                <span class="text-xs text-red-800 font-medium flex items-center">
+                                    <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify KYC
+                                </span>
+                            </a>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="account-settings.html" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
+                            </a>
+                            <a href="#" onclick="logout(); return false;" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                                <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 space-y-1">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Main Menu</p>
+                    <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="home" class="mr-3 h-5 w-5 text-gray-500"></i> Dashboard
+                    </a>
+                    <a href="accounthistory.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="activity" class="mr-3 h-5 w-5 text-gray-500"></i> Transactions
+                    </a>
+                    <a href="card.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-primary-50 text-black border-l-4 border-primary-500 pl-2">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-black"></i> Cards
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Transfers</p>
+                    <a href="localtransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="send" class="mr-3 h-5 w-5 text-gray-500"></i> Local Transfer
+                    </a>
+                    <a href="internationaltransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="globe" class="mr-3 h-5 w-5 text-gray-500"></i> International Wire
+                    </a>
+                    <a href="deposits.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="download" class="mr-3 h-5 w-5 text-gray-500"></i> Deposit
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Services</p>
+                    <a href="loan.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Loan Request
+                    </a>
+                    <a href="irs-refund.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="receipt" class="mr-3 h-5 w-5 text-gray-500"></i> IRS Tax Refund
+                    </a>
+                    <a href="#" id="link-loan-history" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="history" class="mr-3 h-5 w-5 text-gray-500"></i> Loan History
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Account</p>
+                    <a href="account-settings.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="settings" class="mr-3 h-5 w-5 text-gray-500"></i> Settings
+                    </a>
+                    <a href="support.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="help-circle" class="mr-3 h-5 w-5 text-gray-500"></i> Support Ticket
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-green-500 mr-2"></i>
+                        <span class="text-xs text-gray-500">Secure Banking</span>
+                    </div>
+                    <span class="text-xs text-gray-400">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+
+            <!-- Header -->
+            <header class="bg-white shadow-sm z-20">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center md:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <a href="dashboard.html" class="ml-4">
+                            <img src="/assets/logo.png" alt="Logo" class="h-8 w-auto" onerror="this.style.display='none'">
+                        </a>
+                    </div>
+                    <div class="hidden md:flex md:flex-1">
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i data-lucide="calendar" class="h-4 w-4 mr-2 text-gray-400"></i>
+                            <span id="current-date"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden md:flex items-center px-3 py-1.5 bg-primary-50 rounded-full">
+                            <i data-lucide="wallet" class="h-4 w-4 text-gray-900 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900" id="header-balance">$0.00</span>
+                        </div>
+                        <div class="relative">
+                            <button @click="userDropdownOpen = !userDropdownOpen">
+                                <img id="header-user-image" class="h-8 w-8 rounded-full object-cover border-2 border-gray-200" src="" alt="">
+                            </button>
+                            <div x-show="userDropdownOpen" @click.away="userDropdownOpen = false"
+                                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50"
+                                 x-transition>
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-sm font-medium text-gray-900" id="dropdown-user-name">Loading...</p>
+                                    <p class="text-xs text-gray-500 mt-1" id="dropdown-user-id">ID: ...</p>
+                                </div>
+                                <a href="support.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="help-circle" class="h-4 w-4 mr-3 text-gray-500"></i> Support
+                                </a>
+                                <a href="account-settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> Profile
+                                </a>
+                                <a href="#" onclick="logout(); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto pb-16 md:pb-0">
+                <div class="py-6">
+                    <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+
+                        <!-- Title + Apply Button -->
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
+                                <div>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <a href="dashboard.html" class="hover:text-primary-600">Dashboard</a>
+                                        <i data-lucide="chevron-right" class="h-4 w-4 mx-2"></i>
+                                        <span class="font-medium text-gray-700">Cards</span>
+                                    </div>
+                                    <h1 class="text-2xl font-bold text-gray-900 mt-1">Virtual Cards</h1>
+                                </div>
+                                <div id="apply-button-container">
+                                    <!-- Filled by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+                            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
+                                        <i data-lucide="credit-card" class="h-6 w-6 text-green-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-500">Active Cards</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-1" id="stat-active">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-yellow-100 rounded-full p-3">
+                                        <i data-lucide="clock" class="h-6 w-6 text-yellow-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-500">Pending Applications</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-1" id="stat-pending">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
+                                            <i data-lucide="wallet" class="h-6 w-6 text-blue-600"></i>
+                                        </div>
+                                        <div class="ml-4">
+                                            <p class="text-sm font-medium text-gray-500">Total Card Balance</p>
+                                            <p class="text-3xl font-bold text-gray-900 mt-1" id="stat-balance">$0.00</p>
+                                        </div>
+                                    </div>
+                                    <div id="swap-button-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cards List -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                            <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                                <h2 class="text-lg font-medium text-gray-900">Your Cards</h2>
+                            </div>
+                            <div id="cards-container">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+
+                        <!-- How It Works -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-bold text-gray-900 mb-6">How Virtual Cards Work</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
+                                        <i data-lucide="file-text" class="h-6 w-6 text-gray-600"></i>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">1. Apply</h3>
+                                    <p class="text-gray-600">Complete the application form for your virtual card. Select your preferred card type and set your spending limits.</p>
+                                </div>
+                                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
+                                        <i data-lucide="check-circle" class="h-6 w-6 text-gray-600"></i>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">2. Activate</h3>
+                                    <p class="text-gray-600">Once approved, your virtual card will be ready to use. View the card details and activate it from your dashboard.</p>
+                                </div>
+                                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
+                                        <i data-lucide="shopping-cart" class="h-6 w-6 text-gray-600"></i>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">3. Use</h3>
+                                    <p class="text-gray-600">Use your virtual card for online transactions anywhere major credit cards are accepted. Monitor transactions in real-time.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ -->
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                            <div class="border-b border-gray-200 px-6 py-4">
+                                <h2 class="text-lg font-medium text-gray-900">Frequently Asked Questions</h2>
+                            </div>
+                            <div class="p-6">
+                                <dl class="space-y-6">
+                                    <div>
+                                        <dt class="text-base font-medium text-gray-900">What is a virtual card?</dt>
+                                        <dd class="mt-2 text-sm text-gray-600">A virtual card is a digital payment card that can be used for online transactions. It works just like a physical card but exists only in digital form, providing enhanced security for online purchases.</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-base font-medium text-gray-900">How secure are virtual cards?</dt>
+                                        <dd class="mt-2 text-sm text-gray-600">Virtual cards offer additional security as they're separate from your primary account. You can create cards with specific spending limits and even create single-use cards for enhanced protection against fraud.</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-base font-medium text-gray-900">Can I have multiple virtual cards?</dt>
+                                        <dd class="mt-2 text-sm text-gray-600">Yes, you can apply for multiple virtual cards for different purposes - such as one for subscriptions, another for shopping, etc.</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="text-base font-medium text-gray-900">How long does it take to get a virtual card?</dt>
+                                        <dd class="mt-2 text-sm text-gray-600">Virtual cards are typically issued within minutes after approval. Once approved, you can immediately view and use the card details.</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Card Detail Modal -->
+        <div x-show="cardModalOpen" 
+             class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm p-4"
+             @click="cardModalOpen = false"
+             x-transition>
+            <div @click.stop class="relative max-w-lg w-full">
+                <button @click="cardModalOpen = false" class="absolute -top-12 right-0 text-white hover:text-gray-300">
+                    <i data-lucide="x-circle" class="h-8 w-8"></i>
+                </button>
+
+                <div class="credit-card" :class="{ 'card-flipped': cardFlipped }">
+                    <div class="card-inner">
+                        <!-- Front -->
+                        <div class="card-face card-front">
+                            <div class="card-logo">swiftcaptial</div>
+                            <div class="chip"></div>
+                            <div class="card-number" x-text="selectedCard?.formattedNumber || '•••• •••• •••• ••••'"></div>
+                            <div class="card-bottom-row">
+                                <div>
+                                    <div class="card-holder-label">CARDHOLDER</div>
+                                    <div class="holder-name" x-text="selectedCard?.cardHolderName || 'FULL NAME'"></div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="card-expiry-label">EXPIRES END</div>
+                                    <div class="expiry-date" x-text="selectedCard?.expiryDate || 'MM/YY'"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="card-face card-back">
+                            <div class="magnetic-stripe"></div>
+                            <div class="signature-panel relative">
+                                <div class="cvv-box" x-text="selectedCard?.cvv || '***'"></div>
+                            </div>
+                            <div class="issuer-text">
+                                For customer service visit www.swiftcaptial.com
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button @click="cardFlipped = !cardFlipped"
+                            class="inline-flex items-center px-8 py-3 bg-gray-900 text-white text-base font-medium rounded-xl hover:bg-gray-800 transition shadow-lg">
+                        <span x-text="cardFlipped ? 'Show Front' : 'Show Back (CVV)'"></span>
+                        <i data-lucide="refresh-cw" class="h-5 w-5 ml-3"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Auth check
+            if (typeof requireAuthPage === 'function') requireAuthPage();
+            else if (!localStorage.getItem('token')) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Date
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            // Hide loader
+            setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 600);
+
+            try {
+                const res = await api.get('/cards');
+                const data = res.data;
+
+                if (!data.success) throw new Error(data.message || 'Failed to load cards');
+
+                const { user, cards, stats } = data;
+                const currency = user.currency || '$';
+                const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim();
+                const avatarUrl = user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0ea5e9&color=fff`;
+
+                // Fill user info
+                document.getElementById('sidebar-user-name').textContent = fullName;
+                document.getElementById('sidebar-user-id').textContent = `ID: ${user._id}`;
+                document.getElementById('sidebar-user-image').src = avatarUrl;
+                document.getElementById('header-user-image').src = avatarUrl;
+                document.getElementById('dropdown-user-name').textContent = fullName;
+                document.getElementById('dropdown-user-id').textContent = `ID: ${user._id}`;
+                document.getElementById('header-balance').textContent = `${currency}${user.balance || '0.00'}`;
+                document.getElementById('link-loan-history').href = `viewloan.html?id=${user._id}`;
+
+                // Stats
+                document.getElementById('stat-active').textContent = stats.activeCount;
+                document.getElementById('stat-pending').textContent = stats.pendingCount;
+                document.getElementById('stat-balance').textContent = `${currency}${stats.totalCardBalance}`;
+
+                // Apply button
+                const applyContainer = document.getElementById('apply-button-container');
+                if (stats.pendingCount === 0 && stats.activeCount === 0) {
+                    applyContainer.innerHTML = `
+                        <a href="apply.html" class="inline-flex items-center px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700">
+                            <i data-lucide="plus" class="h-4 w-4 mr-2"></i> Apply for Card
+                        </a>`;
+                } else {
+                    applyContainer.innerHTML = `
+                        <button disabled class="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-600 bg-gray-100 cursor-not-allowed">
+                            <i data-lucide="clock" class="h-4 w-4 mr-2"></i>
+                            ${stats.pendingCount > 0 ? 'Application Pending' : 'Card Active'}
+                        </button>`;
+                }
+
+                // Swap button
+                const swapContainer = document.getElementById('swap-button-container');
+                if (parseFloat(stats.totalCardBalance) > 0) {
+                    swapContainer.innerHTML = `
+                        <button onclick="swapBalance('${stats.totalCardBalance}')"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                            <i data-lucide="refresh-cw" class="h-4 w-4 mr-2"></i> Swap to Main
+                        </button>`;
+                }
+
+                // Cards list
+                const cardsContainer = document.getElementById('cards-container');
+                if (!cards || cards.length === 0) {
+                    cardsContainer.innerHTML = `
+                        <div class="p-12 text-center">
+                            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-100 mb-4">
+                                <i data-lucide="credit-card" class="h-8 w-8 text-gray-400"></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-900 mb-2">No cards yet</h3>
+                            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                                You haven't applied for any virtual cards yet. Apply now to get started with secure online payments.
+                            </p>
+                            ${stats.pendingCount === 0 && stats.activeCount === 0 ? 
+                                `<a href="apply.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700">Apply for Card</a>` :
+                                `<button disabled class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-600 bg-gray-100 cursor-not-allowed">Application ${stats.pendingCount > 0 ? 'Pending' : 'Active'}</button>`
+                            }
+                        </div>`;
+                } else {
+                    cardsContainer.innerHTML = `
+                        <div class="divide-y divide-gray-200">
+                            ${cards.map(card => {
+                                const statusClass = card.status === 'active' ? 'bg-green-100 text-green-800' :
+                                                   card.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                   'bg-gray-100 text-gray-800';
+                                const last4 = card.cardNumber ? card.cardNumber.slice(-4) : '****';
+                                return `
+                                <div class="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:bg-gray-50 transition cursor-pointer"
+                                     onclick="openCardModal(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+                                    <div class="flex items-center">
+                                        <div class="h-14 w-20 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center text-white font-mono text-sm font-bold shadow-inner">
+                                            ${(card.cardType || 'CARD').toUpperCase()}
+                                        </div>
+                                        <div class="ml-5">
+                                            <p class="font-semibold text-gray-900">${card.cardHolderName || 'Card Holder'}</p>
+                                            <p class="text-sm text-gray-500 font-mono">•••• •••• •••• ${last4}</p>
+                                            <p class="text-xs text-gray-400 mt-1">Expires ${card.expiryDate || '—'}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-gray-900">${card.currency || currency} ${Number(card.balance || 0).toFixed(2)}</p>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${statusClass}">
+                                            ${(card.status || 'pending').charAt(0).toUpperCase() + (card.status || 'pending').slice(1)}
+                                        </span>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>`;
+                }
+
+                lucide.createIcons();
+
+            } catch (err) {
+                console.error('Cards load error:', err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else window.location.href = '/login.html';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: err.response?.data?.message || err.message || 'Failed to load cards',
+                        confirmButtonColor: '#0ea5e9'
+                    });
+                }
+            }
+        });
+
+        // Open card modal
+        function openCardModal(card) {
+            const alpineRoot = document.querySelector('[x-data]');
+            if (alpineRoot && alpineRoot.__x) {
+                const data = alpineRoot.__x.$data;
+                data.selectedCard = {
+                    ...card,
+                    formattedNumber: card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '•••• •••• •••• ••••'
+                };
+                data.cardModalOpen = true;
+                data.cardFlipped = false;
+            }
+        }
+
+        // Swap balance
+        async function swapBalance(maxAmount) {
+            const { value: amount } = await Swal.fire({
+                title: 'Transfer to Main Balance',
+                input: 'number',
+                inputLabel: 'Amount to transfer',
+                inputValue: maxAmount,
+                inputAttributes: { min: '0.01', max: maxAmount, step: '0.01' },
+                showCancelButton: true,
+                confirmButtonText: 'Transfer',
+                confirmButtonColor: '#0ea5e9',
+                preConfirm: (val) => {
+                    if (!val || val <= 0) {
+                        Swal.showValidationMessage('Please enter a valid amount');
+                        return false;
+                    }
+                    return val;
+                }
+            });
+
+            if (!amount) return;
+
+            Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            try {
+                const res = await api.post('/cards/swap-balance', { amount: parseFloat(amount) });
+                const data = res.data;
+
+                if (!data.success) throw new Error(data.message || 'Transfer failed');
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Balance transferred successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => location.reload());
+
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.response?.data?.message || err.message || 'Failed to transfer balance',
+                    confirmButtonColor: '#0ea5e9'
+                });
+            }
+        }
+    </script>
+</body>
+</html>

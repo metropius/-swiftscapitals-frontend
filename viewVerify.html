@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | View KYC Verification</title>
+    <meta name="description" content="KYC verification details - Admin panel" />
+
+    <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1'},
+                        secondary: {500:'#14b8a6',600:'#0f766e'},
+                        accent: {500:'#ec4899',600:'#db2777'}
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: "Graphik", system-ui, sans-serif; }
+        .page-loading { position:fixed; inset:0; background:#fff; z-index:9999; transition:all .4s .2s; }
+        .page-loading.active { opacity:1; visibility:visible; }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false }">
+
+        <!-- Sidebar -->
+        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'" 
+             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+            <div class="p-6 border-b border-gray-800">
+                <a href="/adminiRoute">
+                    <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto mx-auto">
+                </a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a href="/adminiRoute" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5 mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/all-cards" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i>
+                    <span>All Cards</span>
+                </a>
+                <a href="/allTransfer" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="send" class="w-5 h-5 mr-3"></i>
+                    <span>All Transfers</span>
+                </a>
+                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="download" class="w-5 h-5 mr-3"></i>
+                    <span>All Deposits</span>
+                </a>
+                <a href="/wallets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="wallet" class="w-5 h-5 mr-3"></i>
+                    <span>Wallets</span>
+                </a>
+                <a href="/allRefund" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
+                    <span>All Refunds</span>
+                </a>
+                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
+                    <span>All Loans</span>
+                </a>
+                <a href="/allVerify" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                    <i data-lucide="shield-check" class="w-5 h-5 mr-3"></i>
+                    <span>All Verifications</span>
+                </a>
+                <a href="/allTickets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
+                    <span>Support Tickets</span>
+                </a>
+                <div class="pt-6 mt-auto border-t border-gray-800">
+                    <a href="/logout" class="flex items-center px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile menu toggle -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-3 rounded-full shadow-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <h1 class="text-xl font-bold text-gray-900">KYC Verification Details</h1>
+                    <a href="/allVerify" class="text-blue-600 hover:underline flex items-center">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Verifications
+                    </a>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+
+                <div class="bg-white shadow rounded-xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
+                                K
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900">
+                                    <%= verification.fullname %> - KYC Verification
+                                </h2>
+                                <p class="text-gray-600">
+                                    <%= verification.status.charAt(0).toUpperCase() + verification.status.slice(1) %> 
+                                    • <%= verification.document_type %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Personal Details -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Personal Details</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Full Name</span>
+                                    <p class="font-medium"><%= verification.fullname %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Email</span>
+                                    <p class="font-medium"><%= verification.email %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Phone</span>
+                                    <p class="font-medium"><%= verification.tel %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Title</span>
+                                    <p class="font-medium"><%= verification.title %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Gender</span>
+                                    <p class="font-medium"><%= verification.gender %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Date of Birth</span>
+                                    <p class="font-medium"><%= new Date(verification.dateofBirth).toLocaleDateString() %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Zip Code</span>
+                                    <p class="font-medium"><%= verification.zipcode %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employment & Address -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Employment & Address</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">State/ID Number</span>
+                                    <p class="font-medium"><%= verification.statenumber %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Account Type</span>
+                                    <p class="font-medium"><%= verification.accounttype %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Employer</span>
+                                    <p class="font-medium"><%= verification.employer %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Income</span>
+                                    <p class="font-medium"><%= verification.income %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Address</span>
+                                    <p class="font-medium"><%= verification.address %>, <%= verification.city %>, <%= verification.state %>, <%= verification.country %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next of Kin -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Next of Kin</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Name</span>
+                                    <p class="font-medium"><%= verification.kinname %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Address</span>
+                                    <p class="font-medium"><%= verification.kinaddress %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Relationship</span>
+                                    <p class="font-medium"><%= verification.relationship %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Age</span>
+                                    <p class="font-medium"><%= verification.age %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        <div class="space-y-4 md:col-span-2 lg:col-span-3">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Uploaded Documents</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <span class="text-sm text-gray-500 block mb-2">Front Side</span>
+                                    <img src="<%= verification.frontimg %>" alt="Front ID" class="w-full h-auto rounded-lg shadow-md object-contain">
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block mb-2">Back Side</span>
+                                    <img src="<%= verification.backimg %>" alt="Back ID" class="w-full h-auto rounded-lg shadow-md object-contain">
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block mb-2">Passport Photo</span>
+                                    <img src="<%= verification.photo %>" alt="Passport" class="w-48 h-48 rounded-full shadow-md object-cover mx-auto">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status & Review -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Status & Review</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Current Status</span>
+                                    <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full 
+                                        <%= verification.status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           verification.status === 'rejected' || verification.status === 'declined' ? 'bg-red-100 text-red-800' : 
+                                           verification.status === 'under review' ? 'bg-blue-100 text-blue-800' : 
+                                           'bg-yellow-100 text-yellow-800' %>">
+                                        <%= verification.status.charAt(0).toUpperCase() + verification.status.slice(1) %>
+                                    </span>
+                                </div>
+                                <% if (verification.rejectionReason) { %>
+                                    <div>
+                                        <span class="text-sm text-gray-500 block">Rejection Reason</span>
+                                        <p class="font-medium text-red-600"><%= verification.rejectionReason %></p>
+                                    </div>
+                                <% } %>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Reviewed By</span>
+                                    <p class="font-medium">
+                                        <%= verification.reviewedBy ? verification.reviewedBy.firstname + ' ' + verification.reviewedBy.lastname : '—' %>
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Reviewed At</span>
+                                    <p class="font-medium"><%= verification.reviewedAt ? new Date(verification.reviewedAt).toLocaleString() : '—' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timestamps -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Timestamps</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Created At</span>
+                                    <p class="font-medium"><%= new Date(verification.createdAt).toLocaleString() %></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 block">Last Updated</span>
+                                    <p class="font-medium"><%= new Date(verification.updatedAt).toLocaleString() %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t bg-gray-50 flex justify-end space-x-4">
+                        <a href="/editVerify/<%= verification._id %>" class="px-6 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">
+                            Edit Verification
+                        </a>
+                        <a href="/allVerify" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            document.querySelector('.page-loading').classList.remove('active');
+        });
+    </script>
+</body>
+</html>

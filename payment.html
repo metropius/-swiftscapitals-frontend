@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Make Payment</title>
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial." />
+    <link rel="shortcut icon" href="/assets/favicon.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--primary-color-lightest', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--secondary-color-dark', '#0f766e');
+        document.documentElement.style.setProperty('--secondary-color-light', '#5eead4');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+        document.documentElement.style.setProperty('--sidebar-text-color', '#ffffff');
+        document.documentElement.style.setProperty('--card-bg-color', '#ffffff');
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#38bdf8', 100: '#38bdf8', 200: '#38bdf8', 300: '#38bdf8', 400: '#38bdf8',
+                            500: '#0ea5e9', 600: '#0ea5e9', 700: '#0369a1', 800: '#0369a1', 900: '#0369a1',
+                        },
+                        secondary: {
+                            50: '#5eead4', 100: '#5eead4', 200: '#5eead4', 300: '#5eead4', 400: '#5eead4',
+                            500: '#14b8a6', 600: '#14b8a6', 700: '#0f766e', 800: '#0f766e', 900: '#0f766e',
+                        },
+                        accent: {
+                            50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6',
+                            500: '#ec4899', 600: '#db2777', 700: '#be185d', 800: '#9d174d', 900: '#831843',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @font-face { font-family: Graphik; font-weight: 400; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikRegular.otf"); }
+        @font-face { font-family: Graphik; font-weight: 500; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikRegular.otf"); }
+        @font-face { font-family: Graphik; font-weight: 700; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikMedium.otf"); }
+        @font-face { font-family: Graphik; font-weight: 800; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikBold.otf"); }
+        body { font-family: "Graphik", sans-serif; }
+        .page-loading { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: all .4s .2s ease-in-out; }
+        .page-loading.hidden { display: none; opacity: 0; }
+        .loading-animation { position: relative; width: 80px; height: 80px; margin-bottom: 1rem; }
+        .loading-animation .circle { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 4px solid transparent; animation: rotateCircle 1.5s linear infinite; }
+        .loading-animation .circle:nth-child(1) { border-top-color: var(--primary-color); }
+        .loading-animation .circle:nth-child(2) { border-right-color: var(--primary-color-light); animation-delay: 0.2s; }
+        .loading-animation .circle:nth-child(3) { border-bottom-color: var(--secondary-color); animation-delay: 0.4s; }
+        .loading-animation .circle:nth-child(4) { border-left-color: var(--primary-color-lightest); animation-delay: 0.6s; }
+        .loading-animation .core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(45deg, var(--primary-color-light), var(--primary-color-dark)); }
+        @keyframes rotateCircle { to { transform: rotate(360deg); } }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="page-loading active" id="pageLoader">
+        <div class="text-center">
+            <div class="loading-animation mx-auto">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="core"></div>
+            </div>
+            <div class="text-primary-600 font-medium">swiftcaptial Banking</div>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false, userDropdownOpen: false }">
+
+        <!-- Sidebar Desktop -->
+        <div class="hidden md:flex md:w-64 md:flex-col bg-white h-full border-r border-gray-200 shadow-sm">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                <div class="flex items-center justify-center flex-shrink-0 px-4 mb-6">
+                    <a href="dashboard.html" class="flex items-center">
+                        <img src="assets/logo.png" alt="Logo" class="h-10 w-auto" onerror="this.src='https://ui-avatars.com/api/?name=SC&background=0ea5e9&color=fff'">
+                    </a>
+                </div>
+
+                <div class="px-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-3">
+                            <div class="flex-shrink-0 mr-3">
+                                <img id="sidebar-avatar" src="" alt="User" class="h-10 w-10 rounded-full object-cover border-2 border-primary-100">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate" id="sidebar-fullname">Loading...</p>
+                                <p class="text-xs text-gray-500 truncate" id="sidebar-id">ID: —</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <a href="verify-account.html" class="flex items-center justify-center py-1 rounded-md bg-red-50 border border-red-100 hover:bg-red-100 transition-colors">
+                                <span class="text-xs text-red-800 font-medium flex items-center">
+                                    <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify KYC
+                                </span>
+                            </a>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="account-settings.html" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
+                            </a>
+                            <a href="#" onclick="logout()" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                                <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="flex-1 px-4 space-y-1">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Main Menu</p>
+                    <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="home" class="mr-3 h-5 w-5 text-gray-500"></i> Dashboard
+                    </a>
+                    <a href="#" id="nav-transactions" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="activity" class="mr-3 h-5 w-5 text-gray-500"></i> Transactions
+                    </a>
+                    <a href="cards.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Cards
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Transfers</p>
+                    <a href="localtransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="send" class="mr-3 h-5 w-5 text-gray-500"></i> Local Transfer
+                    </a>
+                    <a href="internationaltransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="globe" class="mr-3 h-5 w-5 text-gray-500"></i> International Wire
+                    </a>
+                    <a href="deposits.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-primary-50 text-black border-l-4 border-primary-500 pl-2">
+                        <i data-lucide="download" class="mr-3 h-5 w-5 text-black"></i> Deposit
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Services</p>
+                    <a href="loan.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Loan Request
+                    </a>
+                    <a href="irs-refund.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="receipt" class="mr-3 h-5 w-5 text-gray-500"></i> IRS Tax Refund
+                    </a>
+                    <a href="#" id="nav-loan-history" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="history" class="mr-3 h-5 w-5 text-gray-500"></i> Loan History
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Account</p>
+                    <a href="account-settings.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="settings" class="mr-3 h-5 w-5 text-gray-500"></i> Settings
+                    </a>
+                    <a href="support.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="help-circle" class="mr-3 h-5 w-5 text-gray-500"></i> Support Ticket
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-green-500 mr-2"></i>
+                        <span class="text-xs text-gray-500">Secure Banking</span>
+                    </div>
+                    <span class="text-xs text-gray-400">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <header class="bg-white shadow-sm z-20">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center md:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-gray-500 hover:text-gray-600">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <a href="dashboard.html" class="ml-4">
+                            <img src="assets/logo.png" alt="Logo" class="h-8 w-auto" onerror="this.src='https://ui-avatars.com/api/?name=SC&background=0ea5e9&color=fff'">
+                        </a>
+                    </div>
+                    <div class="hidden md:flex md:flex-1 md:items-center">
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i data-lucide="calendar" class="h-4 w-4 mr-2 text-gray-400"></i>
+                            <span id="current-date"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden md:flex items-center px-3 py-1.5 bg-primary-50 rounded-full">
+                            <i data-lucide="wallet" class="h-4 w-4 text-gray-900 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900" id="header-balance">$0.00</span>
+                        </div>
+                        <div class="relative">
+                            <button @click="userDropdownOpen = !userDropdownOpen" class="flex items-center max-w-xs text-sm rounded-full focus:outline-none">
+                                <img id="header-avatar" class="h-8 w-8 rounded-full object-cover border-2 border-gray-200" src="" alt="User">
+                            </button>
+                            <div x-show="userDropdownOpen" @click.away="userDropdownOpen = false" x-cloak
+                                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-sm font-medium text-gray-900" id="dropdown-fullname">User</p>
+                                    <p class="text-xs text-gray-500 mt-1" id="dropdown-id">ID: —</p>
+                                </div>
+                                <a href="support.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="help-circle" class="h-4 w-4 mr-3 text-gray-500"></i> Support Ticket
+                                </a>
+                                <a href="account-settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> My Profile
+                                </a>
+                                <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu -->
+            <div x-show="mobileMenuOpen" x-cloak class="fixed inset-0 flex items-center justify-center z-40 md:hidden">
+                <div class="fixed inset-0 bg-black bg-opacity-50" @click="mobileMenuOpen = false"></div>
+                <div class="relative w-11/12 max-w-md bg-white rounded-2xl shadow-2xl p-5 z-50">
+                    <button type="button" class="absolute top-4 right-4 text-gray-400" @click="mobileMenuOpen = false">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+                    <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+                        <img id="mobile-avatar" class="h-12 w-12 rounded-full object-cover border-2 border-primary-100 mr-3" src="" alt="">
+                        <div>
+                            <h2 class="text-base font-semibold text-gray-900" id="mobile-fullname">User</h2>
+                            <p class="text-sm text-gray-500" id="mobile-id">Account: —</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="dashboard.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="home" class="h-5 w-5"></i></div><span class="text-xs font-medium">Home</span></div></a>
+                        <a href="#" id="mobile-transactions" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="activity" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Activity</span></div></a>
+                        <a href="cards.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="credit-card" class="h-5 w-5"></i></div><span class="text-xs font-medium">Cards</span></div></a>
+                        <a href="localtransfer.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="send" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Transfer</span></div></a>
+                        <a href="internationaltransfer.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="globe" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Int'l Wire</span></div></a>
+                        <a href="deposits.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="download" class="h-5 w-5"></i></div><span class="text-xs font-medium">Deposit</span></div></a>
+                        <a href="loan.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="credit-card" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Loan</span></div></a>
+                        <a href="account-settings.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="settings" class="h-5 w-5"></i></div><span class="text-xs font-medium">Settings</span></div></a>
+                        <a href="#" onclick="logout()" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i></div><span class="text-xs font-medium">Logout</span></div></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Mobile Nav -->
+            <div class="fixed bottom-0 left-0 right-0 md:hidden z-30">
+                <div class="bg-white border-t border-gray-200 shadow-lg rounded-t-3xl mx-2 mb-1">
+                    <div class="flex justify-between items-center px-6 py-3 relative">
+                        <a href="dashboard.html" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center"><i data-lucide="home" class="h-5 w-5 text-gray-500"></i></div>
+                            <span class="text-xs font-medium text-gray-500">Home</span>
+                        </a>
+                        <a href="#" id="bottom-transactions" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center"><i data-lucide="bar-chart-2" class="h-5 w-5 text-gray-500"></i></div>
+                            <span class="text-xs font-medium text-gray-500">Stats</span>
+                        </a>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0">
+                            <button @click="mobileMenuOpen = true" class="bg-gradient-to-r from-primary-600 to-primary-800 w-16 h-16 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                                <i data-lucide="grid" class="h-8 w-8 text-white"></i>
+                            </button>
+                        </div>
+                        <a href="cards.html" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center"><i data-lucide="credit-card" class="h-5 w-5 text-gray-500"></i></div>
+                            <span class="text-xs font-medium text-gray-500">Cards</span>
+                        </a>
+                        <a href="account-settings.html" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center"><i data-lucide="user" class="h-5 w-5 text-gray-500"></i></div>
+                            <span class="text-xs font-medium text-gray-500">Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <main class="flex-1 overflow-y-auto pb-16 md:pb-0">
+                <div class="py-6">
+                    <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+
+                        <div class="container mx-auto px-4 py-6 max-w-4xl">
+                            <div class="flex flex-col mb-6">
+                                <div>
+                                    <h1 class="text-2xl font-bold text-gray-900 mb-1">Make Deposit</h1>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <a href="dashboard.html" class="hover:text-primary-600">Dashboard</a>
+                                        <i data-lucide="chevron-right" class="h-4 w-4 mx-2"></i>
+                                        <a href="deposits.html" class="hover:text-primary-600">Deposits</a>
+                                        <i data-lucide="chevron-right" class="h-4 w-4 mx-2"></i>
+                                        <span class="font-medium text-gray-700">Make Payment</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                                <div class="border-b border-gray-200 px-6 py-4">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                        <div class="flex items-center">
+                                            <i data-lucide="credit-card" class="h-5 w-5 mr-2 text-primary-600"></i>
+                                            <h2 class="text-xl font-semibold text-gray-900">
+                                                Payment Method: <span id="payment-method-label">—</span>
+                                            </h2>
+                                        </div>
+                                        <div class="mt-2 md:mt-0 md:ml-4">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-gray-800">
+                                                Amount: $<span id="payment-amount-label">0.00</span> USD
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-6">
+                                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0">
+                                                <i data-lucide="info" class="h-5 w-5 text-blue-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-sm font-medium text-blue-800">Payment Instructions</h3>
+                                                <div class="mt-2 text-sm text-blue-700">
+                                                    <p>You are to make payment of <strong>$<span id="instruction-amount">0.00</span></strong> using your selected payment method. Screenshot and upload the proof of payment.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bank Transfer Details -->
+                                    <div id="bank-section" class="hidden space-y-6">
+                                        <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                                            <i data-lucide="building-2" class="h-5 w-5 mr-2 text-primary-600"></i>
+                                            Bank Transfer Details
+                                        </h3>
+                                        <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                                                    <div class="flex">
+                                                        <input type="text" id="bank-name" value="" readonly class="block w-full py-2 px-3 border border-gray-200 rounded-l-lg bg-gray-100 text-gray-700 cursor-not-allowed">
+                                                        <button type="button" onclick="copyToClipboard(this)" data-target="bank-name" class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 rounded-r-lg bg-gray-50 hover:bg-gray-100 text-gray-500">
+                                                            <i data-lucide="copy" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Account Name</label>
+                                                    <div class="flex">
+                                                        <input type="text" id="account-name" value="" readonly class="block w-full py-2 px-3 border border-gray-200 rounded-l-lg bg-gray-100 text-gray-700 cursor-not-allowed">
+                                                        <button type="button" onclick="copyToClipboard(this)" data-target="account-name" class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 rounded-r-lg bg-gray-50 hover:bg-gray-100 text-gray-500">
+                                                            <i data-lucide="copy" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+                                                    <div class="flex">
+                                                        <input type="text" id="account-no" value="" readonly class="block w-full py-2 px-3 border border-gray-200 rounded-l-lg bg-gray-100 text-gray-700 cursor-not-allowed">
+                                                        <button type="button" onclick="copyToClipboard(this)" data-target="account-no" class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 rounded-r-lg bg-gray-50 hover:bg-gray-100 text-gray-500">
+                                                            <i data-lucide="copy" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Swift Code</label>
+                                                    <div class="flex">
+                                                        <input type="text" id="swift-code" value="" readonly class="block w-full py-2 px-3 border border-gray-200 rounded-l-lg bg-gray-100 text-gray-700 cursor-not-allowed">
+                                                        <button type="button" onclick="copyToClipboard(this)" data-target="swift-code" class="inline-flex items-center justify-center px-3 py-2 border border-l-0 border-gray-200 rounded-r-lg bg-gray-50 hover:bg-gray-100 text-gray-500">
+                                                            <i data-lucide="copy" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bitcoin Section -->
+                                    <div id="bitcoin-section" class="hidden text-center space-y-6">
+                                        <h3 class="text-lg font-medium text-gray-900 flex items-center justify-center">
+                                            <i data-lucide="bitcoin" class="h-5 w-5 mr-2 text-amber-600"></i>
+                                            Bitcoin Payment
+                                        </h3>
+                                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                            <p class="font-medium mb-3">Send approximately $<span id="btc-amount">0.00</span> USD worth of Bitcoin to:</p>
+                                            <p class="font-mono bg-white p-4 rounded-lg border break-all text-center text-sm" id="btc-address">—</p>
+                                            <div id="btc-qr-container" class="mt-6 hidden">
+                                                <p class="text-sm text-gray-600 mb-3">Scan this QR code with your wallet app</p>
+                                                <img id="btc-qr" src="" alt="Bitcoin QR Code" class="mx-auto max-w-xs rounded-lg shadow-md">
+                                            </div>
+                                            <p id="btc-no-qr" class="text-sm text-gray-500 mt-4 hidden">No QR code available. Please use the wallet address above.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Paypal Section -->
+                                    <div id="paypal-section" class="hidden text-center space-y-6">
+                                        <h3 class="text-lg font-medium text-gray-900 flex items-center justify-center">
+                                            <i data-lucide="paypal" class="h-5 w-5 mr-2 text-blue-600"></i>
+                                            PayPal Payment
+                                        </h3>
+                                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                            <p class="font-medium mb-3">Send $<span id="paypal-amount">0.00</span> USD to:</p>
+                                            <p class="font-mono bg-white p-4 rounded-lg border text-center text-sm" id="paypal-email">—</p>
+                                            <p class="text-sm text-gray-600 mt-4">Use the "Friends & Family" option if possible to avoid fees.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Proof Form -->
+                                    <div class="mt-8">
+                                        <form id="proofForm">
+                                            <div class="mb-6">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Payment Proof</label>
+                                                <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-500 transition-all relative cursor-pointer">
+                                                    <div id="uploadPlaceholder" class="flex flex-col items-center justify-center">
+                                                        <i data-lucide="upload-cloud" class="h-12 w-12 text-gray-400 mb-3"></i>
+                                                        <p class="text-sm font-medium text-gray-600 mb-1">
+                                                            <span class="text-primary-600 font-semibold">Click to upload</span> or drag and drop
+                                                        </p>
+                                                        <p class="text-xs text-gray-500">PNG, JPG, PDF (max. 5MB)</p>
+                                                    </div>
+                                                    <div id="previewContainer" class="hidden">
+                                                        <img id="imagePreview" src="#" alt="Proof Preview" class="max-h-64 mx-auto rounded-lg shadow-md mb-4 object-contain">
+                                                        <p class="text-sm font-medium text-gray-700 flex items-center justify-center">
+                                                            <span id="fileName" class="mr-2"></span>
+                                                            <button type="button" id="removeFile" class="text-red-500 hover:text-red-700">
+                                                                <i data-lucide="x-circle" class="h-5 w-5"></i>
+                                                            </button>
+                                                        </p>
+                                                    </div>
+                                                    <input id="proofUpload" name="image" type="file" class="hidden" accept="image/*,.pdf" required>
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" id="hidden-amount" name="amount" value="">
+                                            <input type="hidden" id="hidden-method" name="payment_method" value="">
+
+                                            <div class="flex justify-center">
+                                                <button type="submit" id="submitBtn" class="inline-flex items-center px-8 py-4 border border-transparent rounded-lg shadow-lg text-base font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                                    <i data-lucide="check-circle" class="h-5 w-5 mr-2"></i>
+                                                    Submit Payment Proof
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+
+            <footer class="bg-white border-t border-gray-200 hidden md:block">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:flex md:items-center md:justify-between">
+                    <div class="flex items-center">
+                        <img src="assets/logo.png" alt="Logo" class="h-6 w-auto mr-2" onerror="this.style.display='none'">
+                        <p class="text-sm text-gray-500">© 2026 swiftcaptial. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Terms of Service</a>
+                        <a href="support.html" class="text-sm text-gray-500 hover:text-gray-700">Contact Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:7000';
+
+        const api = axios.create({
+            baseURL: API_BASE,
+            withCredentials: true
+        });
+
+        api.interceptors.request.use(config => {
+            const token = localStorage.getItem('token');
+            if (token) config.headers.Authorization = `Bearer ${token}`;
+            return config;
+        });
+
+        api.interceptors.response.use(
+            res => res,
+            err => {
+                if (err.response?.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                }
+                return Promise.reject(err);
+            }
+        );
+
+        function isLoggedIn() {
+            return !!localStorage.getItem('token');
+        }
+
+        function getCurrentUser() {
+            try {
+                return JSON.parse(localStorage.getItem('user') || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        function populateUserUI(user) {
+            if (!user) return;
+            const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.replace(/\s+/g, ' ').trim() || 'User';
+            const avatar = user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`;
+            const currency = user.currency || '$';
+            const balance = Number(user.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('sidebar-fullname').textContent = fullName;
+            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
+            document.getElementById('sidebar-avatar').src = avatar;
+            document.getElementById('header-avatar').src = avatar;
+            document.getElementById('header-balance').textContent = `${currency}${balance}`;
+            document.getElementById('dropdown-fullname').textContent = fullName;
+            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
+            document.getElementById('mobile-fullname').textContent = fullName;
+            document.getElementById('mobile-id').textContent = `Account: ${user.account_no || user._id}`;
+            document.getElementById('mobile-avatar').src = avatar;
+
+            const txLink = `accounthistory.html?id=${user._id}`;
+            document.getElementById('nav-transactions').href = txLink;
+            document.getElementById('mobile-transactions').href = txLink;
+            document.getElementById('bottom-transactions').href = txLink;
+            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+        }
+
+        function copyToClipboard(button) {
+            const targetId = button.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            navigator.clipboard.writeText(input.value).then(() => {
+                const original = button.innerHTML;
+                button.innerHTML = '<i data-lucide="check" class="h-4 w-4 text-green-500"></i>';
+                lucide.createIcons();
+                setTimeout(() => {
+                    button.innerHTML = original;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('pageLoader');
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(() => loader.remove(), 400);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            if (!isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const userIdFromUrl = urlParams.get('id');
+            let currentUser = getCurrentUser();
+
+            try {
+                // Prefer dedicated payment endpoint
+                const res = await api.get(userIdFromUrl ? `/payment/${userIdFromUrl}` : '/payment');
+                const data = res.data;
+
+                if (!data.success) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Pending Deposit',
+                        text: data.message || 'Please start a new deposit.',
+                        confirmButtonColor: '#0ea5e9'
+                    }).then(() => {
+                        window.location.href = data.redirect || 'deposits.html';
+                    });
+                    return;
+                }
+
+                currentUser = data.user || currentUser;
+                if (currentUser) {
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    populateUserUI(currentUser);
+                }
+
+                const amount = Number(data.amount || 0).toFixed(2);
+                const method = data.payment_method || '';
+
+                document.getElementById('payment-method-label').textContent = method;
+                document.getElementById('payment-amount-label').textContent = amount;
+                document.getElementById('instruction-amount').textContent = amount;
+                document.getElementById('hidden-amount').value = amount;
+                document.getElementById('hidden-method').value = method;
+
+                // Show correct payment section
+                document.getElementById('bank-section').classList.add('hidden');
+                document.getElementById('bitcoin-section').classList.add('hidden');
+                document.getElementById('paypal-section').classList.add('hidden');
+
+                const wallet = data.wallet || {};
+
+                if (method === 'Bank Transfer') {
+                    document.getElementById('bank-section').classList.remove('hidden');
+                    document.getElementById('bank-name').value = wallet.bank_name || '';
+                    document.getElementById('account-name').value = wallet.account_name || '';
+                    document.getElementById('account-no').value = wallet.account_no || '';
+                    document.getElementById('swift-code').value = wallet.swift_code || '';
+                } else if (method === 'Bitcoin') {
+                    document.getElementById('bitcoin-section').classList.remove('hidden');
+                    document.getElementById('btc-amount').textContent = amount;
+                    document.getElementById('btc-address').textContent = wallet.btc_wallet_address || '—';
+                    if (wallet.btc_qr_image) {
+                        document.getElementById('btc-qr').src = wallet.btc_qr_image;
+                        document.getElementById('btc-qr-container').classList.remove('hidden');
+                    } else {
+                        document.getElementById('btc-no-qr').classList.remove('hidden');
+                    }
+                } else if (method === 'Paypal') {
+                    document.getElementById('paypal-section').classList.remove('hidden');
+                    document.getElementById('paypal-amount').textContent = amount;
+                    document.getElementById('paypal-email').textContent = wallet.paypal_email || '—';
+                }
+
+            } catch (err) {
+                console.error(err);
+                const msg = err.response?.data?.message || 'Could not load payment details.';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: msg,
+                    confirmButtonColor: '#0ea5e9'
+                }).then(() => {
+                    window.location.href = 'deposits.html';
+                });
+            } finally {
+                hideLoader();
+                lucide.createIcons();
+            }
+
+            // ========== File Upload Handling ==========
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('proofUpload');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const previewContainer = document.getElementById('previewContainer');
+            const imagePreview = document.getElementById('imagePreview');
+            const fileNameDisplay = document.getElementById('fileName');
+            const removeButton = document.getElementById('removeFile');
+            const submitBtn = document.getElementById('submitBtn');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+                uploadArea.addEventListener(event, e => e.preventDefault(), false);
+            });
+
+            ['dragenter', 'dragover'].forEach(event => {
+                uploadArea.addEventListener(event, () => {
+                    uploadArea.classList.add('border-primary-500', 'bg-primary-50');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(event => {
+                uploadArea.addEventListener(event, () => {
+                    uploadArea.classList.remove('border-primary-500', 'bg-primary-50');
+                }, false);
+            });
+
+            uploadArea.addEventListener('drop', e => {
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    fileInput.files = files;
+                    handleFile(files[0]);
+                }
+            });
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) handleFile(fileInput.files[0]);
+            });
+
+            removeButton.addEventListener('click', e => {
+                e.stopPropagation();
+                fileInput.value = '';
+                placeholder.classList.remove('hidden');
+                previewContainer.classList.add('hidden');
+                imagePreview.src = '#';
+            });
+
+            function handleFile(file) {
+                fileNameDisplay.textContent = file.name;
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        imagePreview.src = e.target.result;
+                        placeholder.classList.add('hidden');
+                        previewContainer.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type === 'application/pdf') {
+                    imagePreview.src = 'https://img.icons8.com/color/96/pdf.png';
+                    placeholder.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                } else {
+                    imagePreview.src = 'https://img.icons8.com/color/96/file.png';
+                    placeholder.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                }
+            }
+
+            // ========== Submit Proof ==========
+            document.getElementById('proofForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                if (!fileInput.files.length) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Proof',
+                        text: 'Please upload payment proof before submitting',
+                        confirmButtonColor: '#0ea5e9'
+                    });
+                    return;
+                }
+
+                const user = getCurrentUser();
+                if (!user || !user._id) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin mr-2"></i> Submitting...';
+                lucide.createIcons();
+
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                formData.append('amount', document.getElementById('hidden-amount').value);
+                formData.append('payment_method', document.getElementById('hidden-method').value);
+
+                try {
+                    const response = await api.post(`/deposit/confirm/${user._id}`, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+
+                    const result = response.data;
+
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: result.message || 'Proof submitted successfully. Awaiting approval.',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            confirmButtonColor: '#0ea5e9'
+                        }).then(() => {
+                            window.location.href = result.redirect || 'deposits.html';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: result.message || 'Failed to submit proof. Please try again.',
+                            confirmButtonColor: '#0ea5e9'
+                        });
+                    }
+                } catch (err) {
+                    const msg = err.response?.data?.message || 'Could not connect to server. Please check your internet.';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Network Error',
+                        text: msg,
+                        confirmButtonColor: '#0ea5e9'
+                    });
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i data-lucide="check-circle" class="h-5 w-5 mr-2"></i> Submit Payment Proof';
+                    lucide.createIcons();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

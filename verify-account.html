@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="rM0S3Z97WDuA9e2oJH53hcSrOd6Ipmpa4gvDUvT3">
+    <title>swiftcaptial | Verify your Account</title>
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial." />
+    <link rel="shortcut icon" href="storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+    
+    <!-- Theme setup -->
+    <script>
+        document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
+        document.documentElement.style.setProperty('--primary-color-dark', '#0369a1');
+        document.documentElement.style.setProperty('--primary-color-light', '#38bdf8');
+        document.documentElement.style.setProperty('--primary-color-lightest', '#38bdf8');
+        document.documentElement.style.setProperty('--secondary-color', '#14b8a6');
+        document.documentElement.style.setProperty('--secondary-color-dark', '#0f766e');
+        document.documentElement.style.setProperty('--secondary-color-light', '#5eead4');
+        document.documentElement.style.setProperty('--accent-color', '#ec4899');
+        document.documentElement.style.setProperty('--text-color', '#111827');
+        document.documentElement.style.setProperty('--bg-color', '#f9fafb');
+        document.documentElement.style.setProperty('--sidebar-bg-color', '#1e293b');
+        document.documentElement.style.setProperty('--sidebar-text-color', '#ffffff');
+        document.documentElement.style.setProperty('--card-bg-color', '#ffffff');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#38bdf8', 100: '#38bdf8', 200: '#38bdf8', 300: '#38bdf8', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0ea5e9', 700: '#0369a1', 800: '#0369a1', 900: '#0369a1' },
+                        secondary: { 50: '#5eead4', 100: '#5eead4', 200: '#5eead4', 300: '#5eead4', 400: '#5eead4', 500: '#14b8a6', 600: '#14b8a6', 700: '#0f766e', 800: '#0f766e', 900: '#0f766e' },
+                        accent: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777', 700: '#be185d', 800: '#9d174d', 900: '#831843' }
+                    },
+                    boxShadow: { 'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)' },
+                    animation: { 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <style>
+        @font-face { font-family: Graphik; font-weight: 400; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikRegular.otf"); }
+        @font-face { font-family: Graphik; font-weight: 500; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikRegular.otf"); }
+        @font-face { font-family: Graphik; font-weight: 700; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikMedium.otf"); }
+        @font-face { font-family: Graphik; font-weight: 800; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikBold.otf"); }
+        @font-face { font-family: Graphik; font-weight: 900; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/public/asset/fonts/Graphik/GraphikMedium.otf"); }
+        body { font-family: "Graphik", sans-serif; }
+    </style>
+
+    <!-- Loading Animation Styles -->
+    <style>
+        .page-loading { position: fixed; inset: 0; width: 100%; height: 100%; transition: all .4s .2s ease-in-out; background-color: #ffffff; visibility: hidden; z-index: 9999; }
+        .page-loading.active { opacity: 1; visibility: visible; }
+        .page-loading-inner { position: absolute; top: 50%; left: 0; width: 100%; text-align: center; transform: translateY(-50%); transition: opacity .2s ease-in-out; opacity: 0; }
+        .page-loading.active > .page-loading-inner { opacity: 1; }
+        .loading-container { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .loading-animation { display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; margin-bottom: 1rem; position: relative; }
+        .loading-animation .circle { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 4px solid transparent; mix-blend-mode: overlay; animation: rotateCircle 1.5s linear infinite; }
+        .loading-animation .circle:nth-child(1) { border-top-color: var(--primary-color); animation-delay: 0s; }
+        .loading-animation .circle:nth-child(2) { border-right-color: var(--primary-color-light); animation-delay: 0.2s; }
+        .loading-animation .circle:nth-child(3) { border-bottom-color: var(--secondary-color); animation-delay: 0.4s; }
+        .loading-animation .circle:nth-child(4) { border-left-color: var(--primary-color-lightest); animation-delay: 0.6s; }
+        .loading-animation .core { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(45deg, var(--primary-color-light), var(--primary-color-dark)); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); animation: pulse 1s ease-in-out infinite alternate; }
+        .page-loading .text { color: var(--primary-color); font-weight: 500; letter-spacing: 0.05em; margin-top: 0.5rem; font-size: 0.875rem; background: linear-gradient(90deg, var(--primary-color-dark), var(--primary-color-light), var(--primary-color-dark)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradient 2s linear infinite; }
+        @keyframes rotateCircle { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { from { transform: scale(0.8); opacity: 0.8; } to { transform: scale(1.2); opacity: 1; } }
+        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+
+    <!-- PWA manifest and icons -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PWA">
+    <link rel="icon" sizes="512x512" href="/images/icons/icon-512x512.png">
+
+    <!-- Apple splash screens -->
+    <link href="/images/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1242x2208.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/images/icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+
+    <!-- Windows tile -->
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/icons/icon-512x512.png">
+
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js', { scope: '.' })
+                .then(reg => console.log('ServiceWorker registration successful with scope: ', reg.scope))
+                .catch(err => console.log('ServiceWorker registration failed: ', err));
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Page Loader -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="loading-container">
+                <div class="loading-animation">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="core"></div>
+                </div>
+                <div class="text">swiftcaptial Banking</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout -->
+    <div class="flex h-screen overflow-hidden" x-data="{sidebarOpen: false, mobileMenuOpen: false, userDropdownOpen: false, notificationsOpen: false}">
+
+        <!-- Sidebar - Desktop -->
+        <div class="hidden md:flex md:w-64 md:flex-col bg-white h-full border-r border-gray-200 shadow-sm">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                <!-- Logo -->
+                <div class="flex items-center justify-center flex-shrink-0 px-4 mb-6">
+                    <a href="/" class="flex items-center">
+                        <img src="storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                
+                <!-- User Info Card -->
+                <div class="px-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-3">
+                            <div class="flex-shrink-0 mr-3">
+                                <img
+                                    src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                    class="h-12 w-12 rounded-full object-cover border-2 border-primary-100"
+                                    alt="<%= user.firstname %> <%= user.lastname %>"
+                                    onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'"
+                                >
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    <%= user.firstname %> <%= user.lastname %>
+                                </p>
+                                <p class="text-xs text-gray-500 truncate">
+                                    ID: <%= user._id %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- KYC Link -->
+                        <div class="mb-3">
+                            <a href="/verify-account" class="flex items-center justify-center py-1 rounded-md bg-red-50 border border-red-100 hover:bg-red-100 transition-colors">
+                                <span class="text-xs text-red-800 font-medium flex items-center">
+                                    <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify KYC
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <a href="/account-settings" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
+                            </a>
+                            <a href="/logout" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                                <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Items -->
+                <nav class="flex-1 px-4 space-y-1">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Main Menu</p>
+                    <a href="/dashboard" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="home" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Dashboard
+                    </a>
+                    <a href="/accounthistory/<%= user._id %>" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="activity" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Transactions
+                    </a>
+                    <a href="/cards" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Cards
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Transfers</p>
+                    <a href="/localtransfer" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="send" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Local Transfer
+                    </a>
+                    <a href="/internationaltransfer" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="globe" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        International Wire
+                    </a>
+                    <a href="/deposits" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="download" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Deposit
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Services</p>
+                    <a href="/loan" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Loan Request
+                    </a>
+                    <a href="/irs-refund" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="receipt" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        IRS Tax Refund
+                    </a>
+                    <a href="/viewloan/<%= user._id %>" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="history" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Loan History
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Account</p>
+                    <a href="/account-settings" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="settings" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Settings
+                    </a>
+                    <a href="/support" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="help-circle" class="mr-3 h-5 w-5 text-gray-500"></i>
+                        Support Ticket
+                    </a>
+                </nav>
+            </div>
+
+            <!-- App Version -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-green-500 mr-2"></i>
+                        <span class="text-xs text-gray-500">Secure Banking</span>
+                    </div>
+                    <span class="text-xs text-gray-400">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm z-20">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <!-- Mobile: Logo + Menu button -->
+                    <div class="flex items-center md:hidden">
+                        <button 
+                            @click="sidebarOpen = false; mobileMenuOpen = !mobileMenuOpen" 
+                            type="button" 
+                            class="text-gray-500 hover:text-gray-600 focus:outline-none"
+                            aria-label="Toggle menu">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <a href="/dashboard" class="ml-4">
+                            <img src="storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-8 w-auto">
+                        </a>
+                    </div>
+
+                    <!-- Desktop: Date -->
+                    <div class="hidden md:flex md:flex-1 md:items-center">
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i data-lucide="calendar" class="h-4 w-4 mr-2 text-gray-400"></i>
+                            <span id="current-date">Tuesday, January 20, 2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Nav -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Balance (desktop) -->
+                        <div class="hidden md:flex items-center px-3 py-1.5 bg-primary-50 rounded-full">
+                            <i data-lucide="wallet" class="h-4 w-4 text-gray-900 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900">
+                                <%= user.currency %> <%= user.balance %>
+                            </span>
+                        </div>
+
+                        <!-- Notifications -->
+                       
+
+                        <!-- User Dropdown -->
+                        <div class="relative">
+                            <button 
+                                @click="userDropdownOpen = !userDropdownOpen; notificationsOpen = false" 
+                                class="flex items-center max-w-xs text-sm rounded-full focus:outline-none" 
+                                id="user-menu-button" 
+                                aria-expanded="false" 
+                                aria-haspopup="true">
+                                <span class="sr-only">Open user menu</span>
+                                <img 
+                                    class="h-8 w-8 rounded-full object-cover border-2 border-gray-200" 
+                                    src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                    alt="<%= user.firstname %> <%= user.lastname %>"
+                                    onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'"
+                                >
+                            </button>
+
+                            <div 
+                                x-show="userDropdownOpen" 
+                                @click.away="userDropdownOpen = false" 
+                                class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                                role="menu" 
+                                aria-orientation="vertical" 
+                                aria-labelledby="user-menu-button"
+                                tabindex="-1"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-sm font-medium text-gray-900"><%= user.firstname %> <%= user.lastname %></p>
+                                    <p class="text-xs text-gray-500 mt-1">ID: <%= user._id %></p>
+                                    <div class="mt-2">
+                                        <a href="/verify-account" class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 hover:bg-red-200 flex items-center w-max">
+                                            <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify Account
+                                        </a>
+                                    </div>
+                                </div>
+                                <a href="/support" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center" role="menuitem">
+                                    <i data-lucide="help-circle" class="h-4 w-4 mr-3 text-gray-500"></i> Support Ticket
+                                </a>
+                                <a href="/account-settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center" role="menuitem">
+                                    <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> My Profile
+                                </a>
+                                <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center" role="menuitem">
+                                    <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu Popup -->
+            <div 
+                x-show="mobileMenuOpen" 
+                class="fixed inset-0 flex items-center justify-center z-40 md:hidden"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-90"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition-all ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-90">
+                <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" @click="mobileMenuOpen = false" aria-hidden="true"></div>
+                <div class="relative w-11/12 max-w-md bg-white rounded-2xl shadow-2xl p-5 z-50">
+                    <button type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500" @click="mobileMenuOpen = false">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+
+                    <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+                        <div class="flex-shrink-0 mr-3">
+                            <img 
+                                src="<%= user.image || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=random' %>" 
+                                alt="<%= user.firstname %> <%= user.lastname %>"
+                                onerror="this.src='https://ui-avatars.com/api/?name=<%= user.firstname %>+<%= user.lastname %>&background=random'"
+                                class="h-12 w-12 rounded-full object-cover border-2 border-primary-100">
+                        </div>
+                        <div>
+                            <h2 class="text-base font-semibold text-gray-900"><%= user.firstname %> <%= user.lastname %></h2>
+                            <p class="text-sm text-gray-500">Account: <%= user.account_no %></p>
+                            <div class="mt-1">
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800 inline-flex items-center">
+                                    <i data-lucide="clock" class="h-3 w-3 mr-1"></i> Under Review
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-5">
+                        <h2 class="text-xl font-bold text-gray-800">Banking Menu</h2>
+                        <p class="text-sm text-gray-500">Select an option to continue</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="/dashboard" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="home" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Home</span>
+                            </div>
+                        </a>
+                        <a href="/accounthistory/<%= user._id %>" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="activity" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Activity</span>
+                            </div>
+                        </a>
+                        <a href="/cards" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="credit-card" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Cards</span>
+                            </div>
+                        </a>
+                        <a href="/localtransfer" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="send" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Transfer</span>
+                            </div>
+                        </a>
+                        <a href="/internationaltransfer" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="globe" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Int'l Wire</span>
+                            </div>
+                        </a>
+                        <a href="/deposits" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="download" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Deposit</span>
+                            </div>
+                        </a>
+                        <a href="/loan" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="credit-card" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Loan</span>
+                            </div>
+                        </a>
+                        <a href="/irs-refund" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="receipt" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">IRS Refund</span>
+                            </div>
+                        </a>
+                        <a href="/account-settings" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="settings" class="h-5 w-5 text-black"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Settings</span>
+                            </div>
+                        </a>
+                        <a href="/support" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="help-circle" class="h-5 w-5 text-secondary-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Support</span>
+                            </div>
+                        </a>
+                        <a href="/logout" class="group">
+                            <div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 hover:from-accent-100 hover:to-accent-200 transition-all duration-300 p-2">
+                                <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm group-hover:shadow transition-all">
+                                    <i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i>
+                                </div>
+                                <span class="text-xs font-medium text-gray-700">Logout</span>
+                            </div>
+                        </a>
+                        <form id="logout-form-grid" action="/logout" method="POST" style="display: none;"></form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Bottom Navigation -->
+            <div class="fixed bottom-0 left-0 right-0 md:hidden z-30">
+                <div class="bg-white border-t border-gray-200 shadow-lg rounded-t-3xl mx-2 mb-1">
+                    <div class="flex justify-between items-center px-6 py-3 relative">
+                        <a href="/dashboard" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="home" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Home</span>
+                        </a>
+                        <a href="/accounthistory/<%= user._id %>" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="bar-chart-2" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Stats</span>
+                        </a>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0">
+                            <button 
+                                @click="mobileMenuOpen = true" 
+                                class="bg-gradient-to-r from-primary-600 to-primary-800 w-16 h-16 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                                <i data-lucide="grid" class="h-8 w-8 text-white"></i>
+                            </button>
+                        </div>
+                        <a href="/cards" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="credit-card" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Cards</span>
+                        </a>
+                        <a href="/account-settings" class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="h-5 w-5 text-gray-500"></i>
+                            </div>
+                            <span class="text-xs font-medium text-gray-500">Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto pb-16 md:pb-0">
+                <div class="py-6">
+                    <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+                        <div class="container mx-auto px-4 py-6 max-w-8xl">
+
+                            <!-- Page Header -->
+                            <div class="flex flex-col mb-6">
+                                <h1 class="text-2xl font-bold text-gray-900 mb-1">Account Verification</h1>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <a href="/dashboard" class="hover:text-primary-600">Dashboard</a>
+                                    <i data-lucide="chevron-right" class="h-4 w-4 mx-2"></i>
+                                    <span class="font-medium text-gray-700">Account Verification</span>
+                                </div>
+                            </div>
+
+                            <!-- KYC Status Card -->
+                            <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden mb-8">
+                                <div class="p-6">
+                                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                                        <i data-lucide="shield-check" class="w-6 h-6 mr-2 text-primary-600"></i>
+                                        Verification Status
+                                    </h2>
+
+                                    <% if (!user.kyc) { %>
+                                        <div class="p-5 bg-blue-50 border border-blue-100 rounded-lg">
+                                            <p class="text-gray-700 mb-4">
+                                                Your account is not yet verified. Complete the KYC process to unlock full banking features.
+                                            </p>
+                                            <a href="/kyc-form" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition shadow-sm">
+                                                <i data-lucide="shield-check" class="w-5 h-5 mr-2"></i>
+                                                Start Verification Now
+                                            </a>
+                                        </div>
+                                    <% } else { 
+                                        let statusClass = 'bg-gray-100 text-gray-700 border-gray-200';
+                                        let statusIcon = 'clock';
+                                        let statusText = 'Unknown status';
+                                        let canRetry = false;
+
+                                        if (user.kyc.status === 'pending' || user.kyc.status === 'under review') {
+                                            statusClass = 'bg-yellow-50 border-yellow-200 text-yellow-800';
+                                            statusIcon = 'clock';
+                                            statusText = 'Your verification is currently under review. Please wait for admin approval.';
+                                        } else if (user.kyc.status === 'approved') {
+                                            statusClass = 'bg-green-50 border-green-200 text-green-800';
+                                            statusIcon = 'check-circle';
+                                            statusText = 'Your account is fully verified and all features are unlocked!';
+                                        } else if (user.kyc.status === 'rejected' || user.kyc.status === 'declined') {
+                                            statusClass = 'bg-red-50 border-red-200 text-red-800';
+                                            statusIcon = 'alert-circle';
+                                            statusText = 'Your previous verification was declined.';
+                                            canRetry = true;
+                                        }
+                                    %>
+                                        <div class="p-5 <%= statusClass %> rounded-lg border mb-6">
+                                            <div class="flex items-center">
+                                                <i data-lucide="<%= statusIcon %>" class="w-6 h-6 mr-3"></i>
+                                                <span class="font-medium text-lg"><%= statusText %></span>
+                                            </div>
+                                            <% if (user.kyc.rejectionReason) { %>
+                                                <p class="mt-3 text-sm"><%= user.kyc.rejectionReason %></p>
+                                            <% } %>
+                                        </div>
+
+                                        <% if (canRetry) { %>
+                                            <a href="/kyc-form" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition shadow-sm">
+                                                <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                                                Submit New Application
+                                            </a>
+                                        <% } else if (user.kyc.status !== 'approved') { %>
+                                            <button disabled class="inline-flex items-center px-6 py-3 bg-gray-400 text-white font-medium rounded-lg cursor-not-allowed opacity-70 shadow-sm">
+                                                <i data-lucide="lock" class="w-5 h-5 mr-2"></i>
+                                                Awaiting Review
+                                            </button>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- Welcome + Terms (only if no KYC or declined/rejected) -->
+                            <% if (!user.kyc || ['rejected','declined'].includes(user.kyc.status)) { %>
+                            <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+
+                                <!-- Welcome -->
+                                <div class="p-6 border-b border-gray-200">
+                                    <div class="flex items-center mb-4">
+                                        <div class="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center mr-4">
+                                            <i data-lucide="user-check" class="h-6 w-6 text-primary-600"></i>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-xl font-semibold text-gray-900">Welcome to swiftcaptial</h2>
+                                            <p class="text-sm text-gray-500">Complete your account verification to access all features</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="prose prose-sm max-w-none text-gray-600 mb-6">
+                                        <p class="mb-2"><strong>Dear <%= user.firstname %> <%= user.midname %> <%= user.lastname %>,</strong></p>
+                                        <p>Welcome Onboard! swiftcaptial is the market's most innovative and fastest-growing company in the financial industry. We look forward to working with you to help you get the most out of our financial services and realize your banking goals.</p>
+                                        <p>Here at swiftcaptial, we are committed to providing a wide variety of savings, investment, and loan products, all designed to meet your specific needs. Our services are being used by over two million customers around the world.</p>
+                                        <p>Our excellent customer support team is available 24/7 to help you with any questions. You can contact them at: <a href="mailto:support@swiftcaptial.com" class="text-primary-600 hover:text-primary-700">support@swiftcaptial.com</a>.</p>
+                                        <p>We need a little more information to complete your registration, including completing the AML/KYC form. Please review our terms and conditions below before proceeding.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Terms -->
+                                <div class="p-6">
+                                    <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                                        <i data-lucide="file-text" class="h-5 w-5 mr-2 text-primary-600"></i>
+                                        Terms and Conditions
+                                    </h3>
+
+                                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 h-80 overflow-y-auto text-sm text-gray-700 mb-6">
+                                        <p class="mb-4">
+                                            Before you can start using our online service you must agree to be bound by the conditions below. You must read the 
+                                            conditions before you decide whether to accept them. If you agree to be bound by these conditions, please click the 
+                                            I accept button below. If you click on the Decline button, you will not be able to continue your registration for our 
+                                            online services. We strongly recommend that you print a copy of these conditions for your reference.
+                                        </p>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">1. DEFINITIONS</h4>
+                                        <p class="mb-2">In these conditions the following words have the following meanings:</p>
+                                        <ul class="list-disc pl-6 mb-4 space-y-1">
+                                            <li><span class="font-medium">ACCOUNT:</span> any account which you hold and access via our online service.</li>
+                                            <li><span class="font-medium">ADDITIONAL SECURITY DETAILS:</span> the additional information you give us to help us identify you including the additional security question you provide yourself.</li>
+                                            <li><span class="font-medium">IDENTITY DETAILS:</span> the access code we may provide you with.</li>
+                                            <li><span class="font-medium">swiftcaptial ACCOUNT NUMBER, PASSWORD and ACCOUNT PIN:</span> you choose to identify yourself when you use our online service.</li>
+                                            <li><span class="font-medium">YOU, YOUR and YOURSELF:</span> refer to the person who has entered into this agreement with us.</li>
+                                        </ul>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">2. USING THE ONLINE SERVICE</h4>
+                                        <ol class="list-alpha pl-6 mb-4 space-y-2">
+                                            <li>These conditions apply to your use of our online service and in relation to any accounts. They explain the relationship between you and us in relation to our online service. You should read these conditions carefully to understand how these services work and your and our rights and duties under them. If there is a conflict between these conditions and your account conditions, these conditions will apply. This means that, when you use our online service both sets of conditions will apply unless they contradict each other in which case, the relevant condition in these conditions apply.</li>
+                                            <li>If any of your accounts is a joint account, these conditions apply to all of you together and any of you separately. If more than one of you uses our online service you must each choose your own username, password and additional security details.</li>
+                                            <li>By registering to use our online service, you accept these conditions and agree that we may communicate with you by e-mail or through our website.</li>
+                                            <li>When you use our online service you must follow the instructions we give you from time to time. You are responsible for ensuring that your computer, software and other equipment are capable of being used with our online service.</li>
+                                            <li>Our online sites are secure. Disconnection from the Internet or leaving these sites will not automatically log you off. You must always use the log off facility when you are finished and never leave your machine unattended while you are logged in. As a security measure, if you have not used the sites for more than a specified period of time we will ask you to log in again.</li>
+                                        </ol>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">3. WHAT RULES APPLY TO SECURITY?</h4>
+                                        <ol class="list-alpha pl-6 mb-4 space-y-2">
+                                            <li>As part of the registration for our online service you must provide us with identity details before we will allow you to use the services for the first time. You must enter your identity details immediately after signing in, so we can identify you.</li>
+                                            <li>Every time you use our online service you must give us your username, your password and the answer to an additional security question.</li>
+                                            <li>You can change your username or password online by following the instructions on the screen.</li>
+                                            <li>For administration or security reasons, we can require you to choose a new username or change your password before you use (or carry on using) our online service.</li>
+                                            <li>You must not write down, store (whether encrypted or otherwise) on your computer or let anyone else know your password, identity details or additional security details, and the fact that they are for use with your accounts.</li>
+                                        </ol>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">4. WHAT IS THE EXTENT OF YOUR LIABILITY?</h4>
+                                        <ol class="list-alpha pl-6 mb-4 space-y-2">
+                                            <li>If you are a victim of online fraud, we guarantee that you won't lose any money on your accounts and will always be reimbursed in full.</li>
+                                            <li>Unless you are a victim of fraud you are responsible for all instructions and other information sent using your username, password or additional security details.</li>
+                                            <li>You will not be held responsible for any instructions or information sent after you have told us that someone knows your password or additional security details and has used any of them to access our online service.</li>
+                                            <li>swiftcaptial does not accept responsibility for any loss you or anybody else may suffer because any instructions or information you sent us are sent in error, fail to reach us or are distorted unless you have been the victim of fraud.</li>
+                                            <li>swiftcaptial does not accept responsibility for any loss you or anybody else may suffer because any instructions or information we send you fail to reach you or are distorted unless you have been the victim of fraud.</li>
+                                        </ol>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">5. HOW WE CAN CHANGE THESE CONDITIONS</h4>
+                                        <ol class="list-alpha pl-6 mb-4 space-y-2">
+                                            <li>swiftcaptial may change these conditions for any reason by giving you written notice or publishing the change on our website.</li>
+                                            <li>We may send all written notices to you at the last e-mail address you gave us. You must let us know immediately if you change your e-mail address (you can do so online), to make sure that we have your current e-mail address at all times.</li>
+                                        </ol>
+                                        <h4 class="font-semibold text-gray-900 mt-4 mb-2">6. GENERAL</h4>
+                                        <p>swiftcaptial service is available to you if you are 18 years of age or over.</p>
+                                    </div>
+
+                                    <div class="flex flex-wrap gap-4 justify-center sm:justify-start">
+                                        <a href="/kyc-form" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition shadow-sm">
+                                            <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                                            I Accept & Proceed to Verification
+                                        </a>
+                                        <a href="/dashboard" class="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition shadow-sm">
+                                            <i data-lucide="x-circle" class="w-5 h-5 mr-2 text-gray-500"></i>
+                                            Decline
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+
+                            <!-- Support Section -->
+                            <div class="mt-8 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                                <div class="p-6">
+                                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="h-16 w-16 bg-primary-50 rounded-full flex items-center justify-center">
+                                                <i data-lucide="life-buoy" class="h-8 w-8 text-primary-600"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow text-center md:text-left">
+                                            <h3 class="text-lg font-semibold text-gray-900 mb-1">Need help with verification?</h3>
+                                            <p class="text-gray-600">Our support team is available 24/7 to assist you with the verification process. Reach out with any questions.</p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <a href="/support" class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition shadow-sm">
+                                                <i data-lucide="message-square" class="w-5 h-5 mr-2"></i>
+                                                Contact Support
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 hidden md:block">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:flex md:items-center md:justify-between">
+                    <div class="flex items-center">
+                        <img src="storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-6 w-auto mr-2">
+                        <p class="text-sm text-gray-500">© 2026 swiftcaptial. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Terms of Service</a>
+                        <a href="/support" class="text-sm text-gray-500 hover:text-gray-700">Contact Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        window.onload = function() {
+            const preloader = document.querySelector('.page-loading');
+            setTimeout(() => {
+                preloader.classList.remove('active');
+                setTimeout(() => preloader.remove(), 500);
+            }, 800);
+        };
+
+        function updateDate() {
+            document.getElementById('current-date').textContent = 
+    new Date().toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+           
+        }
+        updateDate();
+    </script>
+
+</body>
+</html>

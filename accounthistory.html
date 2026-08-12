@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiftcaptial | Account Transactions History</title>
+    <meta name="description" content="Swift and Secure Money Transfer to any UK bank account will become a breeze with swiftcaptial.">
+    <link rel="shortcut icon" href="/assets/favicon.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {50:'#38bdf8',100:'#38bdf8',200:'#38bdf8',300:'#38bdf8',400:'#38bdf8',500:'#0ea5e9',600:'#0ea5e9',700:'#0369a1',800:'#0369a1',900:'#0369a1'},
+                        secondary: {50:'#5eead4',100:'#5eead4',200:'#5eead4',300:'#5eead4',400:'#5eead4',500:'#14b8a6',600:'#14b8a6',700:'#0f766e',800:'#0f766e',900:'#0f766e'},
+                        accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899',600:'#db2777',700:'#be185d',800:'#9d174d',900:'#831843'}
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .page-loading {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        .page-loading.hidden { opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Loader -->
+    <div class="page-loading" id="pageLoader">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-primary-600 font-medium">Loading Transactions...</p>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: false, mobileMenuOpen: false, userDropdownOpen: false }">
+
+        <!-- ========== SIDEBAR (Desktop) ========== -->
+        <div class="hidden md:flex md:w-64 md:flex-col bg-white h-full border-r border-gray-200 shadow-sm">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                <div class="flex items-center justify-center flex-shrink-0 px-4 mb-6">
+                    <a href="dashboard.html" class="flex items-center">
+                        <img src="/assets/logo.png" alt="Logo" class="h-10 w-auto" onerror="this.style.display='none'">
+                    </a>
+                </div>
+
+                <!-- User Card -->
+                <div class="px-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-3">
+                            <img id="sidebar-user-image" src="" alt="" class="h-10 w-10 rounded-full object-cover border-2 border-primary-100 mr-3">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate" id="sidebar-user-name">Loading...</p>
+                                <p class="text-xs text-gray-500 truncate" id="sidebar-user-id">ID: ...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <a href="verify-account.html" class="flex items-center justify-center py-1 rounded-md bg-red-50 border border-red-100 hover:bg-red-100 transition-colors">
+                                <span class="text-xs text-red-800 font-medium flex items-center">
+                                    <i data-lucide="alert-circle" class="h-3 w-3 mr-1"></i> Verify KYC
+                                </span>
+                            </a>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="account-settings.html" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
+                            </a>
+                            <a href="#" onclick="logout(); return false;" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                                <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 space-y-1">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Main Menu</p>
+                    <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="home" class="mr-3 h-5 w-5 text-gray-500"></i> Dashboard
+                    </a>
+                    <a href="accounthistory.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-primary-50 text-black border-l-4 border-primary-500 pl-2">
+                        <i data-lucide="activity" class="mr-3 h-5 w-5 text-black"></i> Transactions
+                    </a>
+                    <a href="card.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Cards
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Transfers</p>
+                    <a href="localtransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="send" class="mr-3 h-5 w-5 text-gray-500"></i> Local Transfer
+                    </a>
+                    <a href="internationaltransfer.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="globe" class="mr-3 h-5 w-5 text-gray-500"></i> International Wire
+                    </a>
+                    <a href="deposits.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="download" class="mr-3 h-5 w-5 text-gray-500"></i> Deposit
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Services</p>
+                    <a href="loan.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Loan Request
+                    </a>
+                    <a href="irs-refund.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="receipt" class="mr-3 h-5 w-5 text-gray-500"></i> IRS Tax Refund
+                    </a>
+                    <a href="#" id="link-loan-history" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="history" class="mr-3 h-5 w-5 text-gray-500"></i> Loan History
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-2">Account</p>
+                    <a href="account-settings.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="settings" class="mr-3 h-5 w-5 text-gray-500"></i> Settings
+                    </a>
+                    <a href="support.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="help-circle" class="mr-3 h-5 w-5 text-gray-500"></i> Support Ticket
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="shield-check" class="h-4 w-4 text-green-500 mr-2"></i>
+                        <span class="text-xs text-gray-500">Secure Banking</span>
+                    </div>
+                    <span class="text-xs text-gray-400">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+
+            <!-- Header -->
+            <header class="bg-white shadow-sm z-20">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center md:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 hover:text-gray-600">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <a href="dashboard.html" class="ml-4">
+                            <img src="/assets/logo.png" alt="Logo" class="h-8 w-auto" onerror="this.style.display='none'">
+                        </a>
+                    </div>
+
+                    <div class="hidden md:flex md:flex-1 md:items-center">
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i data-lucide="calendar" class="h-4 w-4 mr-2 text-gray-400"></i>
+                            <span id="current-date"></span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden md:flex items-center px-3 py-1.5 bg-primary-50 rounded-full">
+                            <i data-lucide="wallet" class="h-4 w-4 text-gray-900 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900" id="header-balance">$0.00</span>
+                        </div>
+
+                        <div class="relative">
+                            <button @click="userDropdownOpen = !userDropdownOpen" class="flex items-center">
+                                <img id="header-user-image" class="h-8 w-8 rounded-full object-cover border-2 border-gray-200" src="" alt="">
+                            </button>
+                            <div x-show="userDropdownOpen" @click.away="userDropdownOpen = false"
+                                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50"
+                                 x-transition>
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-sm font-medium text-gray-900" id="dropdown-user-name">Loading...</p>
+                                    <p class="text-xs text-gray-500 mt-1" id="dropdown-user-id">ID: ...</p>
+                                </div>
+                                <a href="support.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="help-circle" class="h-4 w-4 mr-3 text-gray-500"></i> Support
+                                </a>
+                                <a href="account-settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> Profile
+                                </a>
+                                <a href="#" onclick="logout(); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto pb-16 md:pb-0">
+                <div class="py-6">
+                    <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+
+                        <!-- Page Header -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-900 mb-1">Transactions</h1>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <a href="dashboard.html" class="hover:text-primary-600">Dashboard</a>
+                                    <i data-lucide="chevron-right" class="h-4 w-4 mx-2"></i>
+                                    <span class="font-medium text-gray-700">Transactions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search -->
+                        <div class="mb-6">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
+                                </div>
+                                <input type="search" id="searchInput"
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                       placeholder="Search by reference or description...">
+                            </div>
+                        </div>
+
+                        <!-- Transactions Table -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference ID</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scope</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200" id="transactions-body">
+                                        <!-- Filled by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 text-white">
+                <h3 class="text-xl font-bold">Deposit Receipt</h3>
+                <p class="text-white/90 mt-1 text-sm">Transaction Details</p>
+            </div>
+            <div class="p-6 space-y-4" id="depositModalContent"></div>
+            <div class="px-6 py-4 bg-gray-50 flex justify-end">
+                <button onclick="document.getElementById('depositModal').classList.add('hidden')"
+                        class="px-5 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div id="transferModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-5 text-white">
+                <h3 class="text-xl font-bold">Transfer Receipt</h3>
+                <p class="text-white/90 mt-1 text-sm">Transaction Details</p>
+            </div>
+            <div class="p-6 space-y-4" id="transferModalContent"></div>
+            <div class="px-6 py-4 bg-gray-50 flex justify-end">
+                <button onclick="document.getElementById('transferModal').classList.add('hidden')"
+                        class="px-5 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Protect page
+            if (typeof requireAuthPage === 'function') {
+                requireAuthPage();
+            } else if (!localStorage.getItem('token')) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Current date
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            // Hide loader
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 600);
+
+            try {
+                // Get user id from URL or from localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                let userId = urlParams.get('id');
+
+                if (!userId) {
+                    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                    userId = storedUser._id;
+                }
+
+                if (!userId) {
+                    throw new Error('User ID not found');
+                }
+
+                // Fetch data
+                const res = await api.get(`/accounthistory/${userId}`);
+                const data = res.data;
+
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to load transactions');
+                }
+
+                const user = data.user;
+                const currency = user.currency || '$';
+                const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim();
+                const avatarUrl = user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0ea5e9&color=fff`;
+
+                // Fill user info
+                document.getElementById('sidebar-user-name').textContent = fullName;
+                document.getElementById('sidebar-user-id').textContent = `ID: ${user._id}`;
+                document.getElementById('sidebar-user-image').src = avatarUrl;
+
+                document.getElementById('header-user-image').src = avatarUrl;
+                document.getElementById('dropdown-user-name').textContent = fullName;
+                document.getElementById('dropdown-user-id').textContent = `ID: ${user._id}`;
+                document.getElementById('header-balance').textContent = `${currency}${user.balance || '0.00'}`;
+
+                document.getElementById('link-loan-history').href = `viewloan.html?id=${user._id}`;
+
+                // Build transactions list
+                const deposits = (user.deposits || []).map(d => ({
+                    ...d,
+                    kind: 'deposit',
+                    icon: 'plus',
+                    color: 'green',
+                    displayType: 'Credit',
+                    description: d.narration || 'Deposit',
+                    scope: d.type || 'Deposit'
+                }));
+
+                const transfers = (user.transfers || []).map(t => ({
+                    ...t,
+                    kind: 'transfer',
+                    icon: t.isIncoming ? 'plus' : 'minus',
+                    color: t.isIncoming ? 'green' : 'red',
+                    displayType: t.isIncoming ? 'Credit' : 'Debit',
+                    description: t.note || t.type || 'Transfer',
+                    scope: t.type || 'Transfer'
+                }));
+
+                // Combine and sort by date (newest first)
+                let allTransactions = [...deposits, ...transfers]
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                const tbody = document.getElementById('transactions-body');
+
+                function renderTransactions(list) {
+                    if (list.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="9" class="px-6 py-12 text-center text-gray-500">
+                                    <i data-lucide="history" class="mx-auto h-12 w-12 text-gray-400"></i>
+                                    <p class="mt-2 text-sm">No transactions found</p>
+                                </td>
+                            </tr>
+                        `;
+                        lucide.createIcons();
+                        return;
+                    }
+
+                    tbody.innerHTML = list.map(tx => {
+                        const statusClass = tx.status === 'approved' || tx.status === 'Approved'
+                            ? 'bg-green-100 text-green-800'
+                            : tx.status === 'pending' || tx.status === 'Pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800';
+
+                        const statusText = (tx.status || 'pending').charAt(0).toUpperCase() + (tx.status || 'pending').slice(1);
+                        const dateStr = new Date(tx.createdAt).toLocaleString('en-US', {
+                            weekday: 'short', month: 'short', day: 'numeric',
+                            year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        });
+
+                        return `
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="h-10 w-10 rounded-full flex items-center justify-center bg-${tx.color}-100">
+                                        <i data-lucide="${tx.icon}" class="h-5 w-5 text-${tx.color}-600"></i>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        ${currency}${Number(tx.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${tx.displayType === 'Credit' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                        ${tx.displayType}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                        ${statusText}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                                    ${tx._id.toString().substring(0, 10)}...
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ${tx.description}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ${tx.scope}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ${dateStr}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="showReceipt('${tx.kind}', '${tx._id}', '${tx.scope}', '${tx.amount}', '${tx.status}', '${tx.description.replace(/'/g, "\\'")}', '${tx.createdAt}', '${tx.transferFrom || ''}')"
+                                            class="text-primary-600 hover:text-primary-900">
+                                        Receipt
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+
+                    lucide.createIcons();
+                }
+
+                // Initial render
+                renderTransactions(allTransactions);
+
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase().trim();
+                    if (!term) {
+                        renderTransactions(allTransactions);
+                        return;
+                    }
+                    const filtered = allTransactions.filter(tx =>
+                        (tx._id && tx._id.toString().toLowerCase().includes(term)) ||
+                        (tx.description && tx.description.toLowerCase().includes(term)) ||
+                        (tx.scope && tx.scope.toLowerCase().includes(term))
+                    );
+                    renderTransactions(filtered);
+                });
+
+                // Global receipt function
+                window.showReceipt = function(kind, id, type, amount, status, note, createdAt, transferFrom) {
+                    const isDeposit = kind === 'deposit';
+                    const modalId = isDeposit ? 'depositModal' : 'transferModal';
+                    const contentId = isDeposit ? 'depositModalContent' : 'transferModalContent';
+
+                    const statusClass = status === 'approved' || status === 'Approved'
+                        ? 'bg-green-100 text-green-800'
+                        : status === 'pending' || status === 'Pending'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-red-100 text-red-800';
+
+                    const content = `
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Reference ID</span>
+                                <span class="font-medium font-mono text-sm">${id}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Type</span>
+                                <span class="font-medium">${type}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Amount</span>
+                                <span class="font-bold ${isDeposit ? 'text-green-600' : 'text-red-600'}">${currency}${Number(amount).toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Status</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">
+                                    ${status.charAt(0).toUpperCase() + status.slice(1)}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">${isDeposit ? 'Narration' : 'Note'}</span>
+                                <span class="font-medium">${note}</span>
+                            </div>
+                            ${!isDeposit && transferFrom ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Source</span>
+                                <span class="font-medium uppercase">${transferFrom}</span>
+                            </div>` : ''}
+                            <div class="flex justify-between pt-3 border-t">
+                                <span class="text-gray-600">Date</span>
+                                <span class="font-medium">${new Date(createdAt).toLocaleString()}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById(contentId).innerHTML = content;
+                    document.getElementById(modalId).classList.remove('hidden');
+                };
+
+                // Close modals on outside click
+                document.addEventListener('click', (e) => {
+                    if (e.target.id === 'depositModal' || e.target.id === 'transferModal') {
+                        e.target.classList.add('hidden');
+                    }
+                });
+
+            } catch (err) {
+                console.error('Transactions load error:', err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else window.location.href = '/login.html';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: err.response?.data?.message || err.message || 'Failed to load transactions',
+                        confirmButtonColor: '#0ea5e9'
+                    });
+                }
+            }
+
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
