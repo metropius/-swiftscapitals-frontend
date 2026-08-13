@@ -15,29 +15,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem('user', JSON.stringify(user));
 
     // ========== USER INFO ==========
-    const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim();
-    const avatarUrl = user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`;
+const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim();
 
-    // Sidebar
-    document.getElementById('sidebar-user-name').textContent = fullName;
-    document.getElementById('sidebar-user-id').textContent = `ID: ${user._id}`;
-    document.getElementById('sidebar-user-image').src = avatarUrl;
-    document.getElementById('sidebar-user-image').alt = fullName;
+// Resolve profile image:
+// - full URL (http/https) → use as-is
+// - relative path (/uploads/...) → prefix with API base
+// - missing → default avatar
+function resolveAvatar(image, name) {
+  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=random`;
+  if (!image || typeof image !== 'string' || !image.trim()) return fallback;
 
-    // Header
-    document.getElementById('header-user-image').src = avatarUrl;
-    document.getElementById('header-user-image').alt = fullName;
-    document.getElementById('dropdown-user-name').textContent = fullName;
-    document.getElementById('dropdown-user-id').textContent = `ID: ${user._id}`;
+  const img = image.trim();
+  if (img.startsWith('http://') || img.startsWith('https://')) return img;
 
-    // Mobile
-    document.getElementById('mobile-user-name').textContent = fullName;
-    document.getElementById('mobile-user-account').textContent = `Account: ${user.account_no || user._id}`;
-    document.getElementById('mobile-user-image').src = avatarUrl;
+  // relative path stored in DB e.g. /uploads/swiftcapital/profiles/...
+  const base = (typeof API_BASE !== 'undefined' ? API_BASE : 'http://localhost:7000').replace(/\/$/, '');
+  return img.startsWith('/') ? `${base}${img}` : `${base}/${img}`;
+}
 
-    // Balance card
-    document.getElementById('balance-card-user-name').textContent = fullName;
-    document.getElementById('balance-card-user-image').src = avatarUrl;
+const avatarUrl = resolveAvatar(user.image, fullName);
+
+// Sidebar
+document.getElementById('sidebar-user-name').textContent = fullName;
+document.getElementById('sidebar-user-id').textContent = `ID: ${user._id}`;
+document.getElementById('sidebar-user-image').src = avatarUrl;
+document.getElementById('sidebar-user-image').alt = fullName;
+
+// Header
+document.getElementById('header-user-image').src = avatarUrl;
+document.getElementById('header-user-image').alt = fullName;
+document.getElementById('dropdown-user-name').textContent = fullName;
+document.getElementById('dropdown-user-id').textContent = `ID: ${user._id}`;
+
+// Mobile
+document.getElementById('mobile-user-name').textContent = fullName;
+document.getElementById('mobile-user-account').textContent = `Account: ${user.account_no || user._id}`;
+document.getElementById('mobile-user-image').src = avatarUrl;
+
+// Balance card
+document.getElementById('balance-card-user-name').textContent = fullName;
+document.getElementById('balance-card-user-image').src = avatarUrl;
 
     // ========== BALANCES ==========
     const currency = user.currency || '$';
