@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://swiftscapitals-backend.onrender.com';
+const API_BASE_URL = 'http://localhost:7000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
