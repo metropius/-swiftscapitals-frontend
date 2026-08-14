@@ -161,7 +161,7 @@
                             <a href="account-settings.html" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
                                 <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
                             </a>
-                            <a href="#" onclick="logout()" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                            <a href="#" onclick="logout(); return false;" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
                                 <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
                             </a>
                         </div>
@@ -273,7 +273,7 @@
                                 <a href="account-settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> My Profile
                                 </a>
-                                <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                <a href="#" onclick="logout(); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
                                 </a>
                             </div>
@@ -318,7 +318,7 @@
                         <a href="irs-refund.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm"><i data-lucide="receipt" class="h-5 w-5 text-black"></i></div><span class="text-xs font-medium text-gray-700">IRS Refund</span></div></a>
                         <a href="account-settings.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 transition-all duration-300 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm"><i data-lucide="settings" class="h-5 w-5 text-black"></i></div><span class="text-xs font-medium text-gray-700">Settings</span></div></a>
                         <a href="support.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 hover:from-secondary-100 hover:to-secondary-200 transition-all duration-300 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm"><i data-lucide="help-circle" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium text-gray-700">Support</span></div></a>
-                        <a href="#" onclick="logout()" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 hover:from-accent-100 hover:to-accent-200 transition-all duration-300 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm"><i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i></div><span class="text-xs font-medium text-gray-700">Logout</span></div></a>
+                        <a href="#" onclick="logout(); return false;" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 hover:from-accent-100 hover:to-accent-200 transition-all duration-300 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm"><i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i></div><span class="text-xs font-medium text-gray-700">Logout</span></div></a>
                     </div>
                 </div>
             </div>
@@ -620,51 +620,10 @@
         </div>
     </div>
 
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
     <script>
-        const API_BASE = 'swiftscapitals-backend.onrender.com';
-
-        const api = axios.create({
-            baseURL: API_BASE,
-            withCredentials: true,
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        api.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (token) config.headers.Authorization = `Bearer ${token}`;
-            return config;
-        });
-
-        api.interceptors.response.use(
-            res => res,
-            err => {
-                if (err.response?.status === 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                }
-                return Promise.reject(err);
-            }
-        );
-
-        function isLoggedIn() {
-            return !!localStorage.getItem('token');
-        }
-
-        function getCurrentUser() {
-            try {
-                return JSON.parse(localStorage.getItem('user') || 'null');
-            } catch {
-                return null;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = 'login.html';
-        }
-
         function populateUserUI(user) {
             if (!user) return;
             const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.replace(/\s+/g, ' ').trim() || 'User';
@@ -672,22 +631,35 @@
             const currency = user.currency || '$';
             const balance = Number(user.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('sidebar-fullname').textContent = fullName;
-            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
-            document.getElementById('sidebar-avatar').src = avatar;
-            document.getElementById('header-avatar').src = avatar;
-            document.getElementById('header-balance').textContent = `${currency}${balance}`;
-            document.getElementById('dropdown-fullname').textContent = fullName;
-            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
-            document.getElementById('mobile-fullname').textContent = fullName;
-            document.getElementById('mobile-id').textContent = `Account: ${user.account_no || user._id}`;
-            document.getElementById('mobile-avatar').src = avatar;
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            const setSrc = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.src = value;
+            };
+
+            setText('sidebar-fullname', fullName);
+            setText('sidebar-id', `ID: ${user._id}`);
+            setSrc('sidebar-avatar', avatar);
+            setSrc('header-avatar', avatar);
+            setText('header-balance', `${currency}${balance}`);
+            setText('dropdown-fullname', fullName);
+            setText('dropdown-id', `ID: ${user._id}`);
+            setText('mobile-fullname', fullName);
+            setText('mobile-id', `Account: ${user.account_no || user._id}`);
+            setSrc('mobile-avatar', avatar);
 
             const txLink = `accounthistory.html?id=${user._id}`;
-            document.getElementById('nav-transactions').href = txLink;
-            document.getElementById('mobile-transactions').href = txLink;
-            document.getElementById('bottom-transactions').href = txLink;
-            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+            const navTx = document.getElementById('nav-transactions');
+            const mobileTx = document.getElementById('mobile-transactions');
+            const bottomTx = document.getElementById('bottom-transactions');
+            const loanHist = document.getElementById('nav-loan-history');
+            if (navTx) navTx.href = txLink;
+            if (mobileTx) mobileTx.href = txLink;
+            if (bottomTx) bottomTx.href = txLink;
+            if (loanHist) loanHist.href = `viewloan.html?id=${user._id}`;
         }
 
         function hideLoader() {
@@ -772,16 +744,25 @@
                 },
 
                 async init() {
-                    if (!isLoggedIn()) {
+                    if (typeof requireAuthPage === 'function') {
+                        requireAuthPage();
+                    } else if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+                        window.location.href = 'login.html';
+                        return;
+                    } else if (!localStorage.getItem('token')) {
                         window.location.href = 'login.html';
                         return;
                     }
 
-                    let user = getCurrentUser();
+                    let user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
                     const params = new URLSearchParams(window.location.search);
                     const queryId = params.get('id');
 
                     try {
+                        if (typeof api === 'undefined') {
+                            throw new Error('API client not loaded. Check config.js');
+                        }
+
                         let url = '/viewloan';
                         if (queryId) url = `/viewloan/${queryId}`;
 
@@ -796,15 +777,22 @@
                         }
                     } catch (err) {
                         console.error('viewloan load error:', err);
-                        const msg = err.response?.data?.message || 'Could not load loan history.';
-                        if (err.response?.status !== 401) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: msg,
-                                confirmButtonColor: '#0ea5e9'
-                            });
+                        if (err.response?.status === 401) {
+                            if (typeof logout === 'function') logout();
+                            else {
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('user');
+                                window.location.href = 'login.html';
+                            }
+                            return;
                         }
+                        const msg = err.response?.data?.message || 'Could not load loan history.';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: msg,
+                            confirmButtonColor: '#0ea5e9'
+                        });
                     }
 
                     if (!user || !user._id) {
@@ -822,9 +810,12 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
         });
 
         window.addEventListener('load', () => {

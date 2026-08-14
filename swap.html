@@ -397,40 +397,10 @@
         </div>
     </div>
 
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
     <script>
-        const API_BASE = 'swiftscapitals-backend.onrender.com';
-
-        const api = axios.create({
-            baseURL: API_BASE,
-            withCredentials: true,
-            headers: { 'Accept': 'application/json' }
-        });
-
-        api.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (token) config.headers.Authorization = `Bearer ${token}`;
-            return config;
-        });
-
-        api.interceptors.response.use(
-            r => r,
-            err => {
-                if (err.response?.status === 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                }
-                return Promise.reject(err);
-            }
-        );
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            api.get('/logout').catch(() => {});
-            window.location.href = 'login.html';
-        }
-
         let currentUserId = null;
         let userCurrency = '$';
         let currentAvailable = { main: 0, card: 0, irs: 0 };
@@ -443,25 +413,38 @@
             const balance = Number(user.balance || 0);
             const btcBal = Number(user.btcBalance || 0);
 
-            document.getElementById('sidebar-fullname').textContent = fullName;
-            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
-            document.getElementById('sidebar-avatar').src = avatar;
-            document.getElementById('header-avatar').src = avatar;
-            document.getElementById('header-balance-usd').textContent = `${userCurrency}${balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('header-balance-btc').textContent = `₿ ${btcBal.toFixed(6)}`;
-            document.getElementById('dropdown-fullname').textContent = fullName;
-            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
-            document.getElementById('mobile-fullname').textContent = fullName;
-            document.getElementById('mobile-id').textContent = `Account: ${user.account_no || user._id}`;
-            document.getElementById('mobile-avatar').src = avatar;
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            const setSrc = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.src = value;
+            };
+
+            setText('sidebar-fullname', fullName);
+            setText('sidebar-id', `ID: ${user._id}`);
+            setSrc('sidebar-avatar', avatar);
+            setSrc('header-avatar', avatar);
+            setText('header-balance-usd', `${userCurrency}${balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+            setText('header-balance-btc', `₿ ${btcBal.toFixed(6)}`);
+            setText('dropdown-fullname', fullName);
+            setText('dropdown-id', `ID: ${user._id}`);
+            setText('mobile-fullname', fullName);
+            setText('mobile-id', `Account: ${user.account_no || user._id}`);
+            setSrc('mobile-avatar', avatar);
 
             const txLink = `accounthistory.html?id=${user._id}`;
-            document.getElementById('nav-transactions').href = txLink;
-            document.getElementById('mobile-transactions').href = txLink;
-            document.getElementById('bottom-transactions').href = txLink;
-            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+            const navTx = document.getElementById('nav-transactions');
+            const mobileTx = document.getElementById('mobile-transactions');
+            const bottomTx = document.getElementById('bottom-transactions');
+            const loanHist = document.getElementById('nav-loan-history');
+            if (navTx) navTx.href = txLink;
+            if (mobileTx) mobileTx.href = txLink;
+            if (bottomTx) bottomTx.href = txLink;
+            if (loanHist) loanHist.href = `viewloan.html?id=${user._id}`;
 
-            document.getElementById('btcBalanceDisplay').textContent = `${btcBal.toFixed(8)} BTC`;
+            setText('btcBalanceDisplay', `${btcBal.toFixed(8)} BTC`);
         }
 
         function updateAvailableDisplay() {
@@ -496,65 +479,84 @@
             el.classList.remove('active');
             setTimeout(() => el.remove(), 400);
         }
-            document.addEventListener('DOMContentLoaded', async () => {
-    if (!localStorage.getItem('token')) {
-        window.location.href = 'login.html';
-        return;
-    }
 
-    try {
-        let user = null;
-        try {
-            user = JSON.parse(localStorage.getItem('user') || 'null');
-        } catch (_) {}
-
-        if (!user?._id) {
-            const dash = await api.get('/dashboard');
-            user = dash.data?.user;
-            if (!user?._id) {
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof requireAuthPage === 'function') {
+                requireAuthPage();
+            } else if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            } else if (!localStorage.getItem('token')) {
                 window.location.href = 'login.html';
                 return;
             }
-            localStorage.setItem('user', JSON.stringify(user));
-        }
 
-        const res = await api.get(`/swap/${user._id}`);
-        if (!res.data?.success || !res.data.user) {
-            window.location.href = 'dashboard.html';
-            return;
-        }
+            try {
+                if (typeof api === 'undefined') {
+                    throw new Error('API client not loaded. Check config.js');
+                }
 
-        const loadedUser = res.data.user;
-        currentUserId = loadedUser._id;
-        localStorage.setItem('user', JSON.stringify(loadedUser));
+                let user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+                try {
+                    if (!user) user = JSON.parse(localStorage.getItem('user') || 'null');
+                } catch (_) {}
 
-        currentAvailable = {
-            main: Number(loadedUser.balance || 0),
-            card: Number(res.data.cardBalance || 0),
-            irs: Number(res.data.irsBalance || 0)
-        };
+                if (!user || !user._id) {
+                    const dash = await api.get('/dashboard');
+                    user = dash.data?.user;
+                    if (!user || !user._id) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
 
-        populateUserUI(loadedUser);
-        updateAvailableDisplay();
-    } catch (err) {
-        console.error(err);
-        if (err.response?.status !== 401) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Could not load swap page',
-                confirmButtonColor: '#0ea5e9'
-            }).then(() => {
-                window.location.href = 'dashboard.html';
-            });
-        }
-        return;
-    }
+                const res = await api.get(`/swap/${user._id}`);
+                if (!res.data?.success || !res.data.user) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
 
-    lucide.createIcons();
-    hideLoader();
-});
-     
+                const loadedUser = res.data.user;
+                currentUserId = loadedUser._id;
+                localStorage.setItem('user', JSON.stringify(loadedUser));
+
+                currentAvailable = {
+                    main: Number(loadedUser.balance || 0),
+                    card: Number(res.data.cardBalance || 0),
+                    irs: Number(res.data.irsBalance || 0)
+                };
+
+                populateUserUI(loadedUser);
+                updateAvailableDisplay();
+            } catch (err) {
+                console.error(err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
+                if (err.response?.status !== 401) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Could not load swap page',
+                        confirmButtonColor: '#0ea5e9'
+                    }).then(() => {
+                        window.location.href = 'dashboard.html';
+                    });
+                }
+                return;
+            }
+
+            lucide.createIcons();
+            hideLoader();
+        });
+
         document.getElementById('balanceSource').addEventListener('change', updateAvailableDisplay);
         document.getElementById('usdAmount').addEventListener('input', updateBTCAmount);
 

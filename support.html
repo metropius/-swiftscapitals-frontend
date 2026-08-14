@@ -514,54 +514,10 @@
         </div>
     </div>
 
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
     <script>
-        const API_BASE = 'swiftscapitals-backend.onrender.com';
-
-        const api = axios.create({
-            baseURL: API_BASE,
-            withCredentials: true,
-            headers: { 'Accept': 'application/json' }
-        });
-
-        api.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (token) config.headers.Authorization = `Bearer ${token}`;
-            return config;
-        });
-
-        api.interceptors.response.use(
-            res => res,
-            err => {
-                if (err.response && err.response.status === 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                }
-                return Promise.reject(err);
-            }
-        );
-
-        function isLoggedIn() {
-            return !!localStorage.getItem('token');
-        }
-
-        function getCurrentUser() {
-            try {
-                return JSON.parse(localStorage.getItem('user') || 'null');
-            } catch {
-                return null;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            if (typeof api !== 'undefined') {
-                api.get('/logout').catch(() => {});
-            }
-            window.location.href = 'login.html';
-        }
-
         function populateUserUI(user) {
             if (!user) return;
             const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.replace(/\s+/g, ' ').trim() || 'User';
@@ -569,24 +525,38 @@
             const currency = user.currency || '$';
             const balance = Number(user.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('sidebar-fullname').textContent = fullName;
-            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
-            document.getElementById('sidebar-avatar').src = avatar;
-            document.getElementById('sidebar-avatar').alt = fullName;
-            document.getElementById('header-avatar').src = avatar;
-            document.getElementById('header-avatar').alt = fullName;
-            document.getElementById('header-balance').textContent = `${currency}${balance}`;
-            document.getElementById('dropdown-fullname').textContent = fullName;
-            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
-            document.getElementById('mobile-fullname').textContent = fullName;
-            document.getElementById('mobile-id').textContent = `Account: ${user.account_no || user._id}`;
-            document.getElementById('mobile-avatar').src = avatar;
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            const setSrc = (id, value, alt) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.src = value;
+                    if (alt) el.alt = alt;
+                }
+            };
+
+            setText('sidebar-fullname', fullName);
+            setText('sidebar-id', `ID: ${user._id}`);
+            setSrc('sidebar-avatar', avatar, fullName);
+            setSrc('header-avatar', avatar, fullName);
+            setText('header-balance', `${currency}${balance}`);
+            setText('dropdown-fullname', fullName);
+            setText('dropdown-id', `ID: ${user._id}`);
+            setText('mobile-fullname', fullName);
+            setText('mobile-id', `Account: ${user.account_no || user._id}`);
+            setSrc('mobile-avatar', avatar);
 
             const txLink = `accounthistory.html?id=${user._id}`;
-            document.getElementById('nav-transactions').href = txLink;
-            document.getElementById('mobile-transactions').href = txLink;
-            document.getElementById('bottom-transactions').href = txLink;
-            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+            const navTx = document.getElementById('nav-transactions');
+            const mobileTx = document.getElementById('mobile-transactions');
+            const bottomTx = document.getElementById('bottom-transactions');
+            const loanHist = document.getElementById('nav-loan-history');
+            if (navTx) navTx.href = txLink;
+            if (mobileTx) mobileTx.href = txLink;
+            if (bottomTx) bottomTx.href = txLink;
+            if (loanHist) loanHist.href = `viewloan.html?id=${user._id}`;
         }
 
         function hideLoader() {
@@ -601,18 +571,29 @@
         let currentUserId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
 
-            if (!isLoggedIn()) {
+            if (typeof requireAuthPage === 'function') {
+                requireAuthPage();
+            } else if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            } else if (!localStorage.getItem('token')) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            let user = getCurrentUser();
+            let user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
 
             try {
+                if (typeof api === 'undefined') {
+                    throw new Error('API client not loaded. Check config.js');
+                }
                 const res = await api.get('/support');
                 if (res.data && res.data.success && res.data.user) {
                     user = res.data.user;
@@ -620,6 +601,15 @@
                 }
             } catch (err) {
                 console.warn('Could not load /support', err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
             }
 
             if (!user || !user._id) {

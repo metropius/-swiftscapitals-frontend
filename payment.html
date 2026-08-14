@@ -58,23 +58,34 @@
         @font-face { font-family: Graphik; font-weight: 500; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikRegular.otf"); }
         @font-face { font-family: Graphik; font-weight: 700; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikMedium.otf"); }
         @font-face { font-family: Graphik; font-weight: 800; src: url("https://bk1.timdigitalz.com/dash2/konanauth/public/asset/fonts/Graphik/GraphikBold.otf"); }
-        body { font-family: "Graphik", sans-serif; }
-        .page-loading { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: all .4s .2s ease-in-out; }
-        .page-loading.hidden { display: none; opacity: 0; }
+        body { font-family: "Graphik", system-ui, -apple-system, sans-serif; }
+        .page-loading {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        .page-loading.hidden { opacity: 0; pointer-events: none; }
         .loading-animation { position: relative; width: 80px; height: 80px; margin-bottom: 1rem; }
-        .loading-animation .circle { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 4px solid transparent; animation: rotateCircle 1.5s linear infinite; }
+        .loading-animation .circle {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border: 4px solid transparent; animation: rotateCircle 1.5s linear infinite;
+        }
         .loading-animation .circle:nth-child(1) { border-top-color: var(--primary-color); }
         .loading-animation .circle:nth-child(2) { border-right-color: var(--primary-color-light); animation-delay: 0.2s; }
         .loading-animation .circle:nth-child(3) { border-bottom-color: var(--secondary-color); animation-delay: 0.4s; }
         .loading-animation .circle:nth-child(4) { border-left-color: var(--primary-color-lightest); animation-delay: 0.6s; }
-        .loading-animation .core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(45deg, var(--primary-color-light), var(--primary-color-dark)); }
+        .loading-animation .core {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 20px; height: 20px; border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color-light), var(--primary-color-dark));
+        }
         @keyframes rotateCircle { to { transform: rotate(360deg); } }
         [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <div class="page-loading active" id="pageLoader">
+    <div class="page-loading" id="pageLoader">
         <div class="text-center">
             <div class="loading-animation mx-auto">
                 <div class="circle"></div>
@@ -83,7 +94,7 @@
                 <div class="circle"></div>
                 <div class="core"></div>
             </div>
-            <div class="text-primary-600 font-medium">swiftcaptial Banking</div>
+            <div class="text-primary-600 font-medium mt-2">swiftcaptial Banking</div>
         </div>
     </div>
 
@@ -120,7 +131,7 @@
                             <a href="account-settings.html" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
                                 <i data-lucide="user" class="h-3 w-3 mr-1"></i> Profile
                             </a>
-                            <a href="#" onclick="logout()" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
+                            <a href="#" onclick="logout(); return false;" class="flex-1 inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-primary-600 hover:bg-primary-700">
                                 <i data-lucide="log-out" class="h-3 w-3 mr-1"></i> Logout
                             </a>
                         </div>
@@ -135,7 +146,7 @@
                     <a href="#" id="nav-transactions" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
                         <i data-lucide="activity" class="mr-3 h-5 w-5 text-gray-500"></i> Transactions
                     </a>
-                    <a href="cards.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <a href="card.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
                         <i data-lucide="credit-card" class="mr-3 h-5 w-5 text-gray-500"></i> Cards
                     </a>
 
@@ -220,7 +231,7 @@
                                 <a href="account-settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i data-lucide="user" class="h-4 w-4 mr-3 text-gray-500"></i> My Profile
                                 </a>
-                                <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                <a href="#" onclick="logout(); return false;" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i data-lucide="log-out" class="h-4 w-4 mr-3 text-gray-500"></i> Sign Out
                                 </a>
                             </div>
@@ -246,13 +257,13 @@
                     <div class="grid grid-cols-3 gap-3">
                         <a href="dashboard.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="home" class="h-5 w-5"></i></div><span class="text-xs font-medium">Home</span></div></a>
                         <a href="#" id="mobile-transactions" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="activity" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Activity</span></div></a>
-                        <a href="cards.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="credit-card" class="h-5 w-5"></i></div><span class="text-xs font-medium">Cards</span></div></a>
+                        <a href="card.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="credit-card" class="h-5 w-5"></i></div><span class="text-xs font-medium">Cards</span></div></a>
                         <a href="localtransfer.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="send" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Transfer</span></div></a>
                         <a href="internationaltransfer.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="globe" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Int'l Wire</span></div></a>
                         <a href="deposits.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="download" class="h-5 w-5"></i></div><span class="text-xs font-medium">Deposit</span></div></a>
                         <a href="loan.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-secondary-50 to-secondary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="credit-card" class="h-5 w-5 text-secondary-600"></i></div><span class="text-xs font-medium">Loan</span></div></a>
                         <a href="account-settings.html" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="settings" class="h-5 w-5"></i></div><span class="text-xs font-medium">Settings</span></div></a>
-                        <a href="#" onclick="logout()" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i></div><span class="text-xs font-medium">Logout</span></div></a>
+                        <a href="#" onclick="logout(); return false;" class="group"><div class="aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-accent-50 to-accent-100 p-2"><div class="h-10 w-10 rounded-full bg-white flex items-center justify-center mb-1"><i data-lucide="log-out" class="h-5 w-5 text-accent-600"></i></div><span class="text-xs font-medium">Logout</span></div></a>
                     </div>
                 </div>
             </div>
@@ -274,7 +285,7 @@
                                 <i data-lucide="grid" class="h-8 w-8 text-white"></i>
                             </button>
                         </div>
-                        <a href="cards.html" class="flex flex-col items-center">
+                        <a href="card.html" class="flex flex-col items-center">
                             <div class="w-10 h-10 rounded-full flex items-center justify-center"><i data-lucide="credit-card" class="h-5 w-5 text-gray-500"></i></div>
                             <span class="text-xs font-medium text-gray-500">Cards</span>
                         </a>
@@ -475,50 +486,10 @@
         </div>
     </div>
 
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
     <script>
-        const API_BASE = 'swiftscapitals-backend.onrender.com';
-
-        const api = axios.create({
-            baseURL: API_BASE,
-            withCredentials: true
-        });
-
-        api.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (token) config.headers.Authorization = `Bearer ${token}`;
-            return config;
-        });
-
-        api.interceptors.response.use(
-            res => res,
-            err => {
-                if (err.response?.status === 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                }
-                return Promise.reject(err);
-            }
-        );
-
-        function isLoggedIn() {
-            return !!localStorage.getItem('token');
-        }
-
-        function getCurrentUser() {
-            try {
-                return JSON.parse(localStorage.getItem('user') || 'null');
-            } catch {
-                return null;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = 'login.html';
-        }
-
         function populateUserUI(user) {
             if (!user) return;
             const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.replace(/\s+/g, ' ').trim() || 'User';
@@ -526,22 +497,35 @@
             const currency = user.currency || '$';
             const balance = Number(user.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('sidebar-fullname').textContent = fullName;
-            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
-            document.getElementById('sidebar-avatar').src = avatar;
-            document.getElementById('header-avatar').src = avatar;
-            document.getElementById('header-balance').textContent = `${currency}${balance}`;
-            document.getElementById('dropdown-fullname').textContent = fullName;
-            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
-            document.getElementById('mobile-fullname').textContent = fullName;
-            document.getElementById('mobile-id').textContent = `Account: ${user.account_no || user._id}`;
-            document.getElementById('mobile-avatar').src = avatar;
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            const setSrc = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.src = value;
+            };
+
+            setText('sidebar-fullname', fullName);
+            setText('sidebar-id', `ID: ${user._id}`);
+            setSrc('sidebar-avatar', avatar);
+            setSrc('header-avatar', avatar);
+            setText('header-balance', `${currency}${balance}`);
+            setText('dropdown-fullname', fullName);
+            setText('dropdown-id', `ID: ${user._id}`);
+            setText('mobile-fullname', fullName);
+            setText('mobile-id', `Account: ${user.account_no || user._id}`);
+            setSrc('mobile-avatar', avatar);
 
             const txLink = `accounthistory.html?id=${user._id}`;
-            document.getElementById('nav-transactions').href = txLink;
-            document.getElementById('mobile-transactions').href = txLink;
-            document.getElementById('bottom-transactions').href = txLink;
-            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+            const navTx = document.getElementById('nav-transactions');
+            const mobileTx = document.getElementById('mobile-transactions');
+            const bottomTx = document.getElementById('bottom-transactions');
+            const loanHist = document.getElementById('nav-loan-history');
+            if (navTx) navTx.href = txLink;
+            if (mobileTx) mobileTx.href = txLink;
+            if (bottomTx) bottomTx.href = txLink;
+            if (loanHist) loanHist.href = `viewloan.html?id=${user._id}`;
         }
 
         function copyToClipboard(button) {
@@ -569,21 +553,32 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
 
-            if (!isLoggedIn()) {
+            if (typeof requireAuthPage === 'function') {
+                requireAuthPage();
+            } else if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            } else if (!localStorage.getItem('token')) {
                 window.location.href = 'login.html';
                 return;
             }
 
             const urlParams = new URLSearchParams(window.location.search);
             const userIdFromUrl = urlParams.get('id');
-            let currentUser = getCurrentUser();
+            let currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
 
             try {
-                // Prefer dedicated payment endpoint
+                if (typeof api === 'undefined') {
+                    throw new Error('API client not loaded. Check config.js');
+                }
+
                 const res = await api.get(userIdFromUrl ? `/payment/${userIdFromUrl}` : '/payment');
                 const data = res.data;
 
@@ -614,7 +609,6 @@
                 document.getElementById('hidden-amount').value = amount;
                 document.getElementById('hidden-method').value = method;
 
-                // Show correct payment section
                 document.getElementById('bank-section').classList.add('hidden');
                 document.getElementById('bitcoin-section').classList.add('hidden');
                 document.getElementById('paypal-section').classList.add('hidden');
@@ -645,6 +639,15 @@
 
             } catch (err) {
                 console.error(err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
                 const msg = err.response?.data?.message || 'Could not load payment details.';
                 Swal.fire({
                     icon: 'error',
@@ -742,7 +745,7 @@
                     return;
                 }
 
-                const user = getCurrentUser();
+                const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
                 if (!user || !user._id) {
                     window.location.href = 'login.html';
                     return;

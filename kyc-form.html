@@ -519,40 +519,10 @@
         </div>
     </div>
 
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+
     <script>
-        const API_BASE = 'swiftscapitals-backend.onrender.com';
-
-        const api = axios.create({
-            baseURL: API_BASE,
-            withCredentials: true,
-            headers: { 'Accept': 'application/json' }
-        });
-
-        api.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (token) config.headers.Authorization = `Bearer ${token}`;
-            return config;
-        });
-
-        api.interceptors.response.use(
-            r => r,
-            err => {
-                if (err.response?.status === 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                }
-                return Promise.reject(err);
-            }
-        );
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            api.get('/logout').catch(() => {});
-            window.location.href = 'login.html';
-        }
-
         function populateUserUI(user) {
             if (!user) return;
             const fullName = `${user.firstname || ''} ${user.midname || ''} ${user.lastname || ''}`.replace(/\s+/g, ' ').trim() || 'User';
@@ -560,20 +530,34 @@
             const currency = user.currency || '$';
             const balance = Number(user.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('sidebar-fullname').textContent = fullName;
-            document.getElementById('sidebar-id').textContent = `ID: ${user._id}`;
-            document.getElementById('sidebar-avatar').src = avatar;
-            document.getElementById('header-avatar').src = avatar;
-            document.getElementById('header-balance').textContent = `${currency}${balance}`;
-            document.getElementById('dropdown-fullname').textContent = fullName;
-            document.getElementById('dropdown-id').textContent = `ID: ${user._id}`;
-            document.getElementById('nav-transactions').href = `accounthistory.html?id=${user._id}`;
-            document.getElementById('nav-loan-history').href = `viewloan.html?id=${user._id}`;
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            const setSrc = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.src = value;
+            };
 
-            // Prefill form
-            document.getElementById('name').value = fullName;
-            if (user.email) document.getElementById('email').value = user.email;
-            if (user.phone) document.getElementById('phone').value = user.phone;
+            setText('sidebar-fullname', fullName);
+            setText('sidebar-id', `ID: ${user._id}`);
+            setSrc('sidebar-avatar', avatar);
+            setSrc('header-avatar', avatar);
+            setText('header-balance', `${currency}${balance}`);
+            setText('dropdown-fullname', fullName);
+            setText('dropdown-id', `ID: ${user._id}`);
+
+            const navTx = document.getElementById('nav-transactions');
+            const loanHist = document.getElementById('nav-loan-history');
+            if (navTx) navTx.href = `accounthistory.html?id=${user._id}`;
+            if (loanHist) loanHist.href = `viewloan.html?id=${user._id}`;
+
+            const nameEl = document.getElementById('name');
+            const emailEl = document.getElementById('email');
+            const phoneEl = document.getElementById('phone');
+            if (nameEl) nameEl.value = fullName;
+            if (emailEl && user.email) emailEl.value = user.email;
+            if (phoneEl && user.phone) phoneEl.value = user.phone;
         }
 
         function hideLoader() {
@@ -586,16 +570,27 @@
         let currentUserId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
 
-            if (!localStorage.getItem('token')) {
+            if (typeof requireAuthPage === 'function') {
+                requireAuthPage();
+            } else if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            } else if (!localStorage.getItem('token')) {
                 window.location.href = 'login.html';
                 return;
             }
 
             try {
+                if (typeof api === 'undefined') {
+                    throw new Error('API client not loaded. Check config.js');
+                }
                 const res = await api.get('/kyc-form');
                 if (!res.data?.success || !res.data.user) {
                     window.location.href = 'login.html';
@@ -613,6 +608,15 @@
                 populateUserUI(user);
             } catch (err) {
                 console.error(err);
+                if (err.response?.status === 401) {
+                    if (typeof logout === 'function') logout();
+                    else {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
                 if (err.response?.status !== 401) {
                     Swal.fire({ icon: 'error', title: 'Error', text: 'Could not load KYC form', confirmButtonColor: '#0ea5e9' })
                         .then(() => window.location.href = 'verify-account.html');
