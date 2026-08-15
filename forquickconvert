@@ -1,12 +1,12 @@
-with editDeposit.html like this
+with editLoan.html like this
 
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>swiftcaptial | Edit Deposit</title>
-    <meta name="description" content="Edit deposit details - Admin panel" />
+    <title>swiftcaptial | Edit Loan</title>
+    <meta name="description" content="Edit loan details - Admin panel" />
 
     <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
 
@@ -155,7 +155,7 @@ with editDeposit.html like this
                     <i data-lucide="send" class="w-5 h-5 mr-3"></i>
                     <span>All Transfers</span>
                 </a>
-                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
                     <i data-lucide="download" class="w-5 h-5 mr-3"></i>
                     <span>All Deposits</span>
                 </a>
@@ -167,7 +167,7 @@ with editDeposit.html like this
                     <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
                     <span>All Refunds</span>
                 </a>
-                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
                     <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
                     <span>All Loans</span>
                 </a>
@@ -195,10 +195,10 @@ with editDeposit.html like this
             <!-- Header -->
             <header class="bg-white shadow-sm z-10">
                 <div class="px-6 py-4 flex items-center justify-between">
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">Edit Deposit</h1>
-                    <a href="/viewDeposit/<%= deposit._id %>" class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">Edit Loan</h1>
+                    <a href="/viewLoan/<%= loan._id %>" class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
                         <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                        View Deposit
+                        View Loan
                     </a>
                 </div>
             </header>
@@ -209,36 +209,48 @@ with editDeposit.html like this
                 <div class="max-w-5xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
 
                     <!-- Form -->
-                    <form id="editDepositForm" class="p-8">
+                    <form id="editLoanForm" class="p-8">
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                            <!-- Type -->
+                            <!-- Loan Amount -->
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                                <input type="text" id="type" name="type" value="<%= deposit.type || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                                <label for="loan_amount" class="block text-sm font-medium text-gray-700 mb-1">Loan Amount</label>
+                                <input type="text" id="loan_amount" name="loan_amount" value="<%= loan.loan_amount || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
                             </div>
 
-                            <!-- Amount -->
+                            <!-- Loan Category -->
                             <div>
-                                <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-                                <input type="text" id="amount" name="amount" value="<%= deposit.amount || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                                <label for="loan_category" class="block text-sm font-medium text-gray-700 mb-1">Loan Category</label>
+                                <input type="text" id="loan_category" name="loan_category" value="<%= loan.loan_category || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- Loan Duration -->
+                            <div>
+                                <label for="loan_duration" class="block text-sm font-medium text-gray-700 mb-1">Loan Duration</label>
+                                <input type="text" id="loan_duration" name="loan_duration" value="<%= loan.loan_duration || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- Loan Income -->
+                            <div>
+                                <label for="loan_income" class="block text-sm font-medium text-gray-700 mb-1">Income Source</label>
+                                <input type="text" id="loan_income" name="loan_income" value="<%= loan.loan_income || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                            </div>
+
+                            <!-- Loan Reason -->
+                            <div class="md:col-span-2">
+                                <label for="loan_reason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Loan</label>
+                                <textarea id="loan_reason" name="loan_reason" rows="4" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"><%= loan.loan_reason || '' %></textarea>
                             </div>
 
                             <!-- Status -->
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                 <select id="status" name="status" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-                                    <option value="pending" <%= deposit.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                                    <option value="approved" <%= deposit.status === 'approved' ? 'selected' : '' %>>Approved</option>
-                                    <option value="rejected" <%= deposit.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                                    <option value="pending" <%= loan.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="approved" <%= loan.status === 'approved' ? 'selected' : '' %>>Approved</option>
+                                    <option value="rejected" <%= loan.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
                                 </select>
-                            </div>
-
-                            <!-- Narration -->
-                            <div class="md:col-span-2">
-                                <label for="narration" class="block text-sm font-medium text-gray-700 mb-1">Narration</label>
-                                <input type="text" id="narration" name="narration" value="<%= deposit.narration || '' %>" class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
                             </div>
 
                         </div>
@@ -248,7 +260,7 @@ with editDeposit.html like this
                             <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition shadow-md">
                                 Save Changes
                             </button>
-                            <a href="/viewDeposit/<%= deposit._id %>" class="px-8 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 transition shadow-md text-center">
+                            <a href="/viewLoan/<%= loan._id %>" class="px-8 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 transition shadow-md text-center">
                                 Cancel
                             </a>
                         </div>
@@ -270,13 +282,13 @@ with editDeposit.html like this
         });
 
         // Form submit – JSON + stay on error, redirect on success
-        document.getElementById('editDepositForm')?.addEventListener('submit', async (e) => {
+        document.getElementById('editLoanForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const formData = Object.fromEntries(new FormData(e.target));
 
             try {
-                const response = await fetch(`/editDeposit/<%= deposit._id %>`, {
+                const response = await fetch(`/editLoan/<%= loan._id %>`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -288,19 +300,18 @@ with editDeposit.html like this
                 const data = await response.json();
 
                 if (!response.ok || !data.success) {
-                    throw new Error(data.message || 'Failed to update deposit');
+                    throw new Error(data.message || 'Failed to update loan');
                 }
 
                 await Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    text: data.message || 'Deposit updated successfully',
+                    text: data.message || 'Loan updated successfully',
                     timer: 2200,
                     showConfirmButton: false
                 });
 
-                // Redirect to list on success
-                window.location.href = '/allFunding';
+                window.location.href = '/allLoans';
             } catch (error) {
                 Swal.fire({
                     icon: 'error',

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>swiftcaptial | View Card</title>
     <meta name="description" content="Card details view - Admin panel" />
-
-    <link rel="shortcut icon" href="/storage/app/public/photos/TydZYFQSbyrBue0oZ1BQzOAr8y3J4VixErlONeNz.png" />
+    <link rel="shortcut icon" href="/assets/favicon.png" />
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         document.documentElement.style.setProperty('--primary-color', '#0ea5e9');
@@ -41,77 +41,109 @@
 
     <style>
         body { font-family: "Graphik", system-ui, sans-serif; }
-        .page-loading { position:fixed; inset:0; background:#fff; z-index:9999; transition:all .4s .2s; }
-        .page-loading.active { opacity:1; visibility:visible; }
+        .page-loading {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            transition: all .4s .2s; visibility: hidden; opacity: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-loading.active { opacity: 1; visibility: visible; }
+        .loading-animation { width: 80px; height: 80px; position: relative; }
+        .circle {
+            position: absolute; inset: 0; border: 4px solid transparent;
+            border-radius: 50%; animation: rotateCircle 1.5s linear infinite;
+        }
+        .circle:nth-child(1) { border-top-color: var(--primary-color); }
+        .circle:nth-child(2) { border-right-color: var(--primary-color-light); animation-delay: .2s; }
+        @keyframes rotateCircle { to { transform: rotate(360deg); } }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
 <body class="bg-gray-50 min-h-screen">
 
+    <div class="page-loading active" id="pageLoader">
+        <div class="loading-animation">
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+    </div>
+
     <div class="flex h-screen overflow-hidden" x-data="{ mobileMenuOpen: false }">
 
-        <!-- Sidebar -->
-        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'" 
-             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+        <div :class="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
+             class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col">
             <div class="p-6 border-b border-gray-800">
-                <a href="/adminiRoute">
-                    <img src="/storage/app/public/photos/I98wEMilPMHkNy8wxBtJ86dmMTWl2kK4kkPJNI9l.png" alt="Logo" class="h-10 w-auto mx-auto">
+                <a href="adminDashboard.html">
+                    <img src="assets/logo.png" alt="Logo" class="h-10 w-auto mx-auto" onerror="this.src='https://ui-avatars.com/api/?name=SC&background=0ea5e9&color=fff'">
                 </a>
             </div>
-            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <a href="/adminiRoute" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+
+            <div class="px-4 py-4 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <img id="admin-avatar" src="" alt="Admin" class="h-10 w-10 rounded-full object-cover border-2 border-gray-700">
+                    <div class="min-w-0">
+                        <p class="text-sm font-medium text-white truncate" id="admin-name">Loading...</p>
+                        <p class="text-xs text-gray-400 truncate" id="admin-email">—</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <a href="adminDashboard.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="home" class="w-5 h-5 mr-3"></i>
-                    <span>Dashboard</span>
+                    Dashboard
                 </a>
-                <a href="/all-cards" class="flex items-center px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400">
+                <a href="all-cards.html" class="flex items-center px-3 py-3 rounded-lg bg-blue-600/20 text-blue-400">
                     <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i>
-                    <span>All Cards</span>
+                    All Cards
                 </a>
-                <a href="/allTransfer" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="allTransfer.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="send" class="w-5 h-5 mr-3"></i>
-                    <span>All Transfers</span>
+                    All Transfers
                 </a>
-                <a href="/allFunding" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="allFunding.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="download" class="w-5 h-5 mr-3"></i>
-                    <span>All Deposits</span>
+                    All Deposits
                 </a>
-                <a href="/wallets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="wallets.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="wallet" class="w-5 h-5 mr-3"></i>
-                    <span>Wallets</span>
+                    Wallets
                 </a>
-                <a href="/allRefund" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="allRefund.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i>
-                    <span>All Refunds</span>
+                    All Refunds
                 </a>
-                <a href="/allLoans" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="allLoans.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
-                    <span>All Loans</span>
+                    All Loans
                 </a>
-                <a href="/allTickets" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="allVerify.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
+                    <i data-lucide="shield-check" class="w-5 h-5 mr-3"></i>
+                    All Verifications
+                </a>
+                <a href="allTickets.html" class="flex items-center px-3 py-3 rounded-lg hover:bg-gray-800">
                     <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
-                    <span>Support Tickets</span>
+                    Support Tickets
                 </a>
                 <div class="pt-6 mt-auto border-t border-gray-800">
-                    <a href="/logout" class="flex items-center px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors">
+                    <a href="#" onclick="logout(); return false;" class="flex items-center px-3 py-3 rounded-lg text-red-400 hover:bg-gray-800">
                         <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
-                        <span>Logout</span>
+                        Logout
                     </a>
                 </div>
             </nav>
         </div>
 
-        <!-- Mobile menu toggle -->
         <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-3 rounded-full shadow-lg">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
 
             <header class="bg-white shadow-sm z-10">
                 <div class="px-6 py-4 flex justify-between items-center">
                     <h1 class="text-xl font-bold text-gray-900">Card Details</h1>
-                    <a href="/all-cards" class="text-blue-600 hover:underline flex items-center">
+                    <a href="all-cards.html" class="text-blue-600 hover:underline flex items-center">
                         <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Cards
                     </a>
                 </div>
@@ -126,37 +158,31 @@
                                 C
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-gray-900">
-                                    <%= card.cardType.toUpperCase() %> <%= card.cardLevel %> Card
-                                </h2>
-                                <p class="text-gray-600">
-                                    <%= card.cardNumber.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 **** **** $4') %> 
-                                    - <%= card.status.charAt(0).toUpperCase() + card.status.slice(1) %>
-                                </p>
+                                <h2 class="text-2xl font-bold text-gray-900" id="card-title">Loading...</h2>
+                                <p class="text-gray-600" id="card-subtitle">—</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Card Info -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Card Information</h3>
                             <div class="space-y-3">
                                 <div>
                                     <span class="text-sm text-gray-500 block">Card Type</span>
-                                    <p class="font-medium capitalize"><%= card.cardType %></p>
+                                    <p class="font-medium capitalize" id="field-cardType">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Card Level</span>
-                                    <p class="font-medium capitalize"><%= card.cardLevel %></p>
+                                    <p class="font-medium capitalize" id="field-cardLevel">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Card Number</span>
-                                    <p class="font-medium"><%= card.cardNumber.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 **** **** $4') %></p>
+                                    <p class="font-medium" id="field-cardNumber">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Expiry Date</span>
-                                    <p class="font-medium"><%= card.expiryDate %></p>
+                                    <p class="font-medium" id="field-expiry">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">CVV</span>
@@ -164,100 +190,87 @@
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Card Holder</span>
-                                    <p class="font-medium"><%= card.cardHolderName %></p>
+                                    <p class="font-medium" id="field-holder">—</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Balance & Limits -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Balance & Limits</h3>
                             <div class="space-y-3">
                                 <div>
                                     <span class="text-sm text-gray-500 block">Currency</span>
-                                    <p class="font-medium"><%= card.currency %></p>
+                                    <p class="font-medium" id="field-currency">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Current Balance</span>
-                                    <p class="font-medium text-green-600"><%= card.currency %> <%= card.balance.toFixed(2) %></p>
+                                    <p class="font-medium text-green-600" id="field-balance">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Daily Limit</span>
-                                    <p class="font-medium"><%= card.currency %> <%= card.dailyLimit.toLocaleString() %></p>
+                                    <p class="font-medium" id="field-dailyLimit">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Status</span>
-                                    <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full 
-                                        <%= card.status === 'active' ? 'bg-green-100 text-green-800' : 
-                                           card.status === 'suspended' || card.status === 'expired' || card.status === 'declined' ? 'bg-red-100 text-red-800' : 
-                                           'bg-yellow-100 text-yellow-800' %>">
-                                        <%= card.status.charAt(0).toUpperCase() + card.status.slice(1) %>
-                                    </span>
+                                    <span id="field-status" class="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800">—</span>
                                 </div>
-                                <% if (card.rejectionReason) { %>
-                                    <div>
-                                        <span class="text-sm text-gray-500 block">Rejection Reason</span>
-                                        <p class="font-medium text-red-600"><%= card.rejectionReason %></p>
-                                    </div>
-                                <% } %>
+                                <div id="rejection-wrap" class="hidden">
+                                    <span class="text-sm text-gray-500 block">Rejection Reason</span>
+                                    <p class="font-medium text-red-600" id="field-rejection">—</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Owner Info -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Owner Information</h3>
                             <div class="space-y-3">
                                 <div>
                                     <span class="text-sm text-gray-500 block">Full Name</span>
-                                    <p class="font-medium">
-                                        <%= card.owner?.firstname || '—' %> 
-                                        <%= card.owner?.lastname || '' %>
-                                    </p>
+                                    <p class="font-medium" id="owner-name">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Email</span>
-                                    <p class="font-medium"><%= card.owner?.email || '—' %></p>
+                                    <p class="font-medium" id="owner-email">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Phone</span>
-                                    <p class="font-medium"><%= card.owner?.phone || '—' %></p>
+                                    <p class="font-medium" id="owner-phone">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Country</span>
-                                    <p class="font-medium"><%= card.owner?.country || '—' %></p>
+                                    <p class="font-medium" id="owner-country">—</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Timestamps -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Timestamps</h3>
                             <div class="space-y-3">
                                 <div>
                                     <span class="text-sm text-gray-500 block">Application Date</span>
-                                    <p class="font-medium"><%= new Date(card.applicationDate).toLocaleString() %></p>
+                                    <p class="font-medium" id="field-applicationDate">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Activation Date</span>
-                                    <p class="font-medium"><%= card.activationDate ? new Date(card.activationDate).toLocaleString() : '—' %></p>
+                                    <p class="font-medium" id="field-activationDate">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Created At</span>
-                                    <p class="font-medium"><%= new Date(card.createdAt).toLocaleString() %></p>
+                                    <p class="font-medium" id="field-created">—</p>
                                 </div>
                                 <div>
                                     <span class="text-sm text-gray-500 block">Last Updated</span>
-                                    <p class="font-medium"><%= new Date(card.updatedAt).toLocaleString() %></p>
+                                    <p class="font-medium" id="field-updated">—</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="p-6 border-t bg-gray-50 flex justify-end space-x-4">
-                        <a href="/editCard/<%= card._id %>" class="px-6 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">
+                        <a href="#" id="edit-card-btn" class="px-6 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">
                             Edit Card
                         </a>
-                        <a href="/all-cards" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                        <a href="all-cards.html" class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
                             Back to List
                         </a>
                     </div>
@@ -267,12 +280,8 @@
         </div>
     </div>
 
-    <script>
-        lucide.createIcons();
-
-        window.addEventListener('load', () => {
-            document.querySelector('.page-loading').classList.remove('active');
-        });
-    </script>
+    <script src="public/js/config.js"></script>
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/viewCard.js"></script>
 </body>
 </html>
